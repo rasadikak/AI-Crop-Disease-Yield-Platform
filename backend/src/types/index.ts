@@ -1,5 +1,6 @@
 export interface Farmer{
   id: string;
+  password: string;
   name: string;
   email: string;
   district: string | null;
