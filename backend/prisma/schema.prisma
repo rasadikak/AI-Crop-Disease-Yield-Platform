@@ -20,5 +20,6 @@ model Farmer {
   email     String   @unique
   password  String
   district  String
+  isVerified Boolean   @default(false)
   createdAt DateTime @default(now())
 }
