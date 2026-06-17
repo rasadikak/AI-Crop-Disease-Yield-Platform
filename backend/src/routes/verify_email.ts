@@ -51,18 +51,18 @@ router.get("/reset-link", (req: Request, res: Response) => {
   const { token } = req.query as { token: string };
   const frontendUrl = process.env.FRONTEND_URL;
 
-  console.log("Reset link clicked — verifying token");
+  console.log("verification link clicked — verifying token");
 
   try {
     
-    verifyResetToken(token);
+    verifyEmailToken(token);
 
     
-    res.redirect(`${frontendUrl}/reset-password?token=${token}`);
+    res.redirect(`${frontendUrl}/login?token=${token}`);
 
   } catch (error) {
-    console.error(`Reset link verification failed — error:${error}`);
-    res.redirect(`${frontendUrl}/forgot-password?error=link_expired`);
+    console.error(` verification failed — error:${error}`);
+    res.redirect(`${frontendUrl}/request?error=link_expired`);
   }
 });
 
