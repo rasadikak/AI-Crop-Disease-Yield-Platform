@@ -4,7 +4,7 @@ import authMiddleware, { AuthRequest } from "../middleware/auth";
 const router = Router();
 
 
-router.route("/")
+router.route("/signout")
   .get(authMiddleware, (req: AuthRequest, res: Response) => {
     try {
       console.log(`Farmer signing out — id:${req.farmerId}`);
