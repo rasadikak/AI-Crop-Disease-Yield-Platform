@@ -2,12 +2,14 @@ import { Request, Response, Router } from "express";
 import prisma from "../models/prisma";
 import { sendEmail } from "../services/sendEmail";
 import {  createVerifyEmailToken, verifyEmailToken } from "../middleware/auth";
-import { hashPassword } from "../utils/password";
+
 
 const router = Router();
 
 // email verification for login
-router.post("/request", async (req: Request, res: Response) => {
+
+
+router.post("/request_verify_link", async (req: Request, res: Response) => {
   const { email } = req.body;  
 
   if (!email) {
@@ -47,7 +49,12 @@ router.post("/request", async (req: Request, res: Response) => {
 
 
 
-router.get("/reset-link", (req: Request, res: Response) => {
+
+
+
+
+
+router.get("/verify", (req: Request, res: Response) => {
   const { token } = req.query as { token: string };
   const frontendUrl = process.env.FRONTEND_URL;
 
@@ -55,10 +62,37 @@ router.get("/reset-link", (req: Request, res: Response) => {
 
   try {
     
-    verifyEmailToken(token);
+    const id=verifyEmailToken(token);
+
+    const user= prisma.farmer.findUnique({where:{id:id}});
+
+    if (!user){
+        console.error(` user not found `);
+        res.redirect(`${frontendUrl}/register?error=user_not_found`);
+    }
+
+    const is_verified= user.is_verified;
+    if (is_verified== true){
+        console.warn(`user is already verified`);
+        res.redirect(`${frontendUrl}/login?msg=user_already_verified}`);
+
+
+    }
+
+    prisma.user.update({
+        where:{id:id},
+        data:{is_verified:true}
+    });
+
+    console.log(`email verified successfully — user:${id}`);
+    res.json({ message: "email verified successfully" });
+    res.redirect(`${frontendUrl}/login}`);
+
+
+
 
     
-    res.redirect(`${frontendUrl}/login?token=${token}`);
+    
 
   } catch (error) {
     console.error(` verification failed — error:${error}`);
@@ -73,54 +107,3 @@ router.get("/reset-link", (req: Request, res: Response) => {
 
 
 
-router.post("/reset", async (req: Request, res: Response) => {
-  const { token, newPassword, confirmPassword } = req.body;
-
-  if (!token || !newPassword || !confirmPassword) {
-    res.status(400).json({ error: "All fields are required" });
-    return;
-  }
-
-  if (newPassword !== confirmPassword) {
-    console.warn("Password reset failed — passwords do not match");
-    res.status(400).json({ error: "Passwords do not match" });
-    return;
-  }
-
-  if (newPassword.length < 6) {
-    res.status(400).json({ error: "Password must be at least 6 characters" });
-    return;
-  }
-
-  try {
-    
-    const farmerId = verifyResetToken(token);
-
-    const farmer = await prisma.farmer.findUnique({ where: { id: farmerId } });
-
-    
-    if (!farmer) {
-      console.warn(`Password reset failed — farmer not found id:${farmerId}`);
-      res.status(400).json({ error: "Farmer not found" });
-      return;
-    }
-
-    
-    const hashedPassword = await hashPassword(newPassword);
-
-    
-    await prisma.farmer.update({
-      where: { id: farmerId },
-      data:  { password: hashedPassword }
-    });
-
-    console.log(`Password updated successfully — farmer:${farmerId}`);
-    res.json({ message: "Password updated successfully" });
-
-  } catch (error) {
-    console.error(`Password reset failed — error:${error}`);
-    res.status(500).json({ error: "Password reset failed" });
-  }
-});
-
-export default router;
