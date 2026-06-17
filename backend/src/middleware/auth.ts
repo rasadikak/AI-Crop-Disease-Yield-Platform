@@ -54,7 +54,7 @@ const authMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  // get Authorization header: "Bearer eyJhbGci..."
+ 
   
   const authHeader = req.headers.authorization;
 
@@ -106,3 +106,66 @@ const authMiddleware = async (
 };
 
 export default authMiddleware;
+
+
+
+
+
+
+
+export const createResetToken = (farmerId: number): string => {
+  return jwt.sign(
+    { farmerId, purpose: "reset" },
+    process.env.RESET_PASSWORD_SECRET as string,
+    { expiresIn: "1h" }   
+  );
+};  //for password resetting
+
+
+export const verifyResetToken = (token: string): number => {
+  try {
+    const payload = jwt.verify(
+      token,
+      process.env.RESET_PASSWORD_SECRET as string
+    ) as { farmerId: number; purpose: string };
+
+    if (payload.purpose !== "reset") {
+      throw new Error("Invalid token purpose");
+    }
+
+    return payload.farmerId;
+
+  } catch (error) {
+    console.warn("Reset token expired or invalid:", error);
+    throw new Error("Token expired or invalid");
+  }
+};   //for password resseting
+
+
+export const createVerifyEmailToken = (farmerId: number): string => {
+  return jwt.sign(
+    { farmerId, purpose: "verify" },
+    process.env.VERIFY_EMAIL_SECRET as string,
+    { expiresIn: "30m" }
+  );
+};  //for email verification
+
+
+export const verifyEmailToken = (token: string): number => {
+  try {
+    const payload = jwt.verify(
+      token,
+      process.env.VERIFY_EMAIL_SECRET as string
+    ) as { farmerId: number; purpose: string };
+
+    if (payload.purpose !== "verify") {
+      throw new Error("Invalid token purpose");
+    }
+
+    return payload.farmerId;
+
+  } catch (error) {
+    console.warn("Email verification token invalid:", error);
+    throw new Error("Invalid or expired verification link");
+  }
+};   //for email verification
