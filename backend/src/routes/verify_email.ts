@@ -1,16 +1,12 @@
 import { Request, Response, Router } from "express";
 import prisma from "../models/prisma";
 import { sendEmail } from "../services/sendEmail";
-import {  createVerifyEmailToken, verifyEmailToken } from "../middleware/auth";
-
+import { createVerifyEmailToken, verifyEmailToken } from "../middleware/auth";
 
 const router = Router();
 
-// email verification for login
-
-
 router.post("/request_verify_link", async (req: Request, res: Response) => {
-  const { email } = req.body;  
+  const { email } = req.body;
 
   if (!email) {
     res.status(400).json({ error: "Email is required" });
@@ -18,28 +14,28 @@ router.post("/request_verify_link", async (req: Request, res: Response) => {
   }
 
   try {
-    
     const user = await prisma.farmer.findUnique({ where: { email } });
 
-    
     if (!user) {
-      console.warn(`Reset failed — farmer not found: ${email}`);
+      console.warn(`Verification failed — farmer not found: ${email}`);
       res.status(400).json({ error: "No account found with this email" });
       return;
     }
 
+    if (user.isVerified) {
+      res.status(400).json({ error: "Email already verified" });
+      return;
+    }
 
     const token = createVerifyEmailToken(user.id);
-
-    
     await sendEmail(email, user.name, "verification", token);
 
-    console.log(`verification email sent — email:${email}`);
-    res.json({ message: "verification email sent to your mail" });
+    console.log(`Verification email sent — email:${email}`);
+    res.json({ message: "Verification email sent to your mail" });
 
   } catch (error) {
-    console.error(`email verification request failed — email:${email} error:${error}`);
-    res.status(500).json({ error: "Failed to send reset email" });
+    console.error(`Email verification request failed — email:${email} error:${error}`);
+    res.status(500).json({ error: "Failed to send verification email" });
   }
 });
 
@@ -53,57 +49,39 @@ router.post("/request_verify_link", async (req: Request, res: Response) => {
 
 
 
-
-router.get("/verify", (req: Request, res: Response) => {
+router.get("/verify", async (req: Request, res: Response) => {
   const { token } = req.query as { token: string };
   const frontendUrl = process.env.FRONTEND_URL;
 
-  console.log("verification link clicked — verifying token");
-
   try {
-    
-    const id=verifyEmailToken(token);
+    const id = verifyEmailToken(token);
 
-    const user= prisma.farmer.findUnique({where:{id:id}});
+    const user = await prisma.farmer.findUnique({ where: { id } });
 
-    if (!user){
-        console.error(` user not found `);
-        res.redirect(`${frontendUrl}/register?error=user_not_found`);
+    if (!user) {
+      console.error(`User not found — id:${id}`);
+      res.redirect(`${frontendUrl}/register?error=user_not_found`);
+      return;
     }
 
-    const is_verified= user.is_verified;
-    if (is_verified== true){
-        console.warn(`user is already verified`);
-        res.redirect(`${frontendUrl}/login?msg=user_already_verified}`);
-
-
+    if (user.isVerified) {
+      console.warn(`User already verified — id:${id}`);
+      res.redirect(`${frontendUrl}/login?msg=user_already_verified`);
+      return;
     }
 
-    prisma.user.update({
-        where:{id:id},
-        data:{is_verified:true}
+    await prisma.farmer.update({
+      where: { id },
+      data:  { isVerified: true }
     });
 
-    console.log(`email verified successfully — user:${id}`);
-    res.json({ message: "email verified successfully" });
-    res.redirect(`${frontendUrl}/login}`);
-
-
-
-
-    
-    
+    console.log(`Email verified successfully — user:${id}`);
+    res.redirect(`${frontendUrl}/login?success=email_verified`);
 
   } catch (error) {
-    console.error(` verification failed — error:${error}`);
-    res.redirect(`${frontendUrl}/request?error=link_expired`);
+    console.error(`Verification failed — error:${error}`);
+    res.redirect(`${frontendUrl}/login?error=link_expired`);
   }
 });
 
-
-
-
-
-
-
-
+export default router;
