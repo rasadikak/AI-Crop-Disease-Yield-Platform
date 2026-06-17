@@ -1,12 +1,12 @@
 import { Request, Response, Router } from "express";
 import prisma from "../models/prisma";
 import { sendEmail } from "../services/sendEmail";
-import { createResetToken, verifyResetToken } from "../middleware/auth";
+import {  createVerifyEmailToken, verifyEmailToken } from "../middleware/auth";
 import { hashPassword } from "../utils/password";
 
 const router = Router();
 
-
+// email verification for login
 router.post("/request", async (req: Request, res: Response) => {
   const { email } = req.body;  
 
@@ -27,16 +27,16 @@ router.post("/request", async (req: Request, res: Response) => {
     }
 
 
-    const token = createResetToken(user.id);
+    const token = createVerifyEmailToken(user.id);
 
     
-    await sendEmail(email, user.name, "passwordResetting", token);
+    await sendEmail(email, user.name, "verification", token);
 
-    console.log(`Password reset email sent — email:${email}`);
-    res.json({ message: "Password reset link sent to your email" });
+    console.log(`verification email sent — email:${email}`);
+    res.json({ message: "verification email sent to your mail" });
 
   } catch (error) {
-    console.error(`Password reset request failed — email:${email} error:${error}`);
+    console.error(`email verification request failed — email:${email} error:${error}`);
     res.status(500).json({ error: "Failed to send reset email" });
   }
 });
