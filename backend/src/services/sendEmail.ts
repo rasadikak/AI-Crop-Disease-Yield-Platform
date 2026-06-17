@@ -38,10 +38,18 @@ export const sendEmail= async(
 
     
     try{
+        await transport.sendMail({
+                from:    `"AgriSense" <${process.env.EMAIL_FROM}>`,
+                to:      toEmail,
+                subject,
+                text
+        });
 
+        console.log(`${type} mail sent successfully to ${toEmail}`);
     }
     catch(error){
-        
+            console.error(`Failed to send ${type} email — to:${toEmail} error:${error}`);
+            throw new Error("Failed to send email");
     }
 
     }
