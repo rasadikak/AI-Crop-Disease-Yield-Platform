@@ -3,9 +3,9 @@ import prisma from "../models/prisma";
 import { sendEmail } from "../services/sendEmail";
 import { createVerifyEmailToken, verifyEmailToken } from "../middleware/auth";
 
-const router = Router();
+const verifyEmailRouter = Router();
 
-router.post("/request_verify_link", async (req: Request, res: Response) => {
+verifyEmailRouter.post("/request_verify_link", async (req: Request, res: Response) => {
   const { email } = req.body;
 
   if (!email) {
@@ -49,7 +49,7 @@ router.post("/request_verify_link", async (req: Request, res: Response) => {
 
 
 
-router.get("/verify", async (req: Request, res: Response) => {
+verifyEmailRouter.get("/verify", async (req: Request, res: Response) => {
   const { token } = req.query as { token: string };
   const frontendUrl = process.env.FRONTEND_URL;
 
@@ -84,4 +84,4 @@ router.get("/verify", async (req: Request, res: Response) => {
   }
 });
 
-export default router;
+export default verifyEmailRouter;

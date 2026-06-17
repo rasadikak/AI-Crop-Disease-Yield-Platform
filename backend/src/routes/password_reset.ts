@@ -4,10 +4,10 @@ import { sendEmail } from "../services/sendEmail";
 import { createResetToken, verifyResetToken } from "../middleware/auth";
 import { hashPassword } from "../utils/password";
 
-const router = Router();
+const forgotPasswordRouter = Router();
 
 
-router.post("/request", async (req: Request, res: Response) => {
+forgotPasswordRouter.post("/request", async (req: Request, res: Response) => {
   const { email } = req.body;  
 
   if (!email) {
@@ -47,7 +47,7 @@ router.post("/request", async (req: Request, res: Response) => {
 
 
 
-router.get("/reset-link", (req: Request, res: Response) => {
+forgotPasswordRouter.get("/reset-link", (req: Request, res: Response) => {
   const { token } = req.query as { token: string };
   const frontendUrl = process.env.FRONTEND_URL;
 
@@ -73,7 +73,7 @@ router.get("/reset-link", (req: Request, res: Response) => {
 
 
 
-router.post("/reset", async (req: Request, res: Response) => {
+forgotPasswordRouter.post("/reset", async (req: Request, res: Response) => {
   const { token, newPassword, confirmPassword } = req.body;
 
   if (!token || !newPassword || !confirmPassword) {
@@ -123,4 +123,4 @@ router.post("/reset", async (req: Request, res: Response) => {
   }
 });
 
-export default router;
+export default forgotPasswordRouter;

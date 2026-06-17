@@ -1,10 +1,10 @@
 import { Request, Response, Router } from "express";
 import authMiddleware, { AuthRequest } from "../middleware/auth";
 
-const router = Router();
+const logoutRouter = Router();
 
 
-router.route("/signout")
+logoutRouter.route("/")
   .get(authMiddleware, (req: AuthRequest, res: Response) => {
     try {
       console.log(`Farmer signing out — id:${req.farmerId}`);
@@ -30,4 +30,4 @@ router.route("/signout")
     }
   });
 
-export default router;
+export default logoutRouter;

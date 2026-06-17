@@ -3,9 +3,9 @@ import { verifyPassword } from "../utils/password";
 import { createToken } from "../middleware/auth";
 import prisma from "../models/prisma";
 
-const router = Router();
+const loginRouter = Router();
 
-router.post("/login", async (req: Request, res: Response) => {
+loginRouter.post("/", async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -46,4 +46,4 @@ router.post("/login", async (req: Request, res: Response) => {
   }
 });
 
-export default router;
+export default loginRouter;

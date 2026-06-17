@@ -2,10 +2,10 @@ import {Request, Response, Router} from "express";
 import { hashPassword } from "../utils/password";
 import prisma from "../models/prisma";
 
-const router= Router();
+const registerRouter= Router();
 
 
-router.post("/register", async(req:Request, res:Response)=>{
+registerRouter.post("/", async(req:Request, res:Response)=>{
     const { name, email, password, district } = req.body;
 
     if(!name || !email || !password || !district){
@@ -53,4 +53,4 @@ router.post("/register", async(req:Request, res:Response)=>{
 
 
 
-export default router;
+export default registerRouter;
