@@ -20,6 +20,28 @@ export const sendEmail= async(
         token:      string
 
 ): Promise<void>=>{
-    const baseURL= process.env.FRONTEND_URL
+    const baseURL= process.env.FRONTEND_URL;
 
-}
+     const link = type === "verification"
+    ? `${baseURL}/verify-email?token=${token}`
+    : `${baseURL}/reset-password?token=${token}`;
+
+  
+    const subject = type === "verification"
+        ? "Verify your AgriSense email"
+        : "Reset your AgriSense password";
+
+    
+    const text = type === "verification"
+        ? `Hi ${farmerName},\n\nClick this link to verify your email:\n${link}\n\nThis link expires in 30 minutes.`
+        : `Hi ${farmerName},\n\nClick this link to reset your password:\n${link}\n\nThis link expires in 1 hour.`;
+
+    
+    try{
+
+    }
+    catch(error){
+        
+    }
+
+    }
