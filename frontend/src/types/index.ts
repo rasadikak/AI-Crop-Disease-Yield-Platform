@@ -18,7 +18,7 @@ export interface RegisterData {
   name: string;
   email: string;
   password: string;
-  district?: string;  // optional
+  district?: string;  
 }
 
 // what the login form sends to backend
