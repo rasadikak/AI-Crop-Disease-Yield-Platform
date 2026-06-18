@@ -1,0 +1,19 @@
+import axios from "axios";
+
+const api= axios.create({
+    baseURL:"http://localhost:3000/api",
+});
+
+api.interceptors.request.use((config)=>{
+    const token= localStorage.getItem("token");
+    if (token){
+        config.headers.Autherization= `Bearer ${token}`
+    }
+
+    return config;
+});
+
+export default api
+
+// Instead of adding Authorization: Bearer token manually to every
+//  single API call, the interceptor does it automatically for every request.
