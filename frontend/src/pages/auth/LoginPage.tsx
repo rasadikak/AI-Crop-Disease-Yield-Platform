@@ -49,7 +49,45 @@ const LoginPage =()=>{
 
 
     return(
-        <div>LoginPage </div>
+        <div>
+            <h2> Login Page</h2>
+
+            {successMsg==="email_verified" && (
+                <p>Email verified successfully! Please login..</p>
+            )}
+
+            {successMsg==="password_updated" &&(
+                <p>Password updated! Please login.</p>
+            )}
+
+            {error && <p style={{ color: "red" }}>{error}</p>}
+
+            <form onSubmit={handleSubmit}>
+
+                <div>
+                    <label>Email</label>
+                    <input type="email" value={email} placeholder="your@email.com" onChange={(e)=>{setEmail(e.target.value)}}/>
+
+                </div>
+
+                <div>
+                    <label>password</label>
+                    <input type="password" value={password} placeholder="" onChange={(e)=>{setPassword(e.target.value)}}/>
+                </div>
+
+                <button type="submit" disabled={isLoading}>
+                    {isLoading ? "Logging in..." : "Login"}
+                </button>
+
+            </form>
+            <p>
+                Don't have an account? <Link to="/signup">Sign up</Link>
+            </p>
+            <p>
+                <Link to="/forgot-password">Forgot password?</Link>
+            </p>
+
+        </div>
     );
 };
 
