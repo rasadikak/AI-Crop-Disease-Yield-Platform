@@ -15,5 +15,27 @@ export const logout = async(): Promise<void> =>{
     await api.get("/auth/logout");
 };
 
+export const forgotPassword = async (email: string): Promise<void> => {
+  await api.post("/auth/forgot-password/request", { email });
+};
+
+
+export const resetPassword = async (
+  token: string,
+  newPassword: string,
+  confirmPassword: string
+): Promise<void> => {
+  await api.post("/auth/forgot-password/reset", {
+    token,
+    newPassword,
+    confirmPassword
+  });
+};
+
+
+export const sendVerificationEmail = async (email: string): Promise<void> => {
+  await api.post("/auth/verify-email/request_verify_link", { email });
+};
+
 
 
