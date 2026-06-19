@@ -26,7 +26,7 @@ registerRouter.post("/", async(req:Request, res:Response)=>{
             return;
         }
 
-        const hashed_password= hashPassword(password);
+        const hashed_password= await hashPassword(password);
 
         const user= await prisma.farmer.create({
             data:{name:name, email:email, password:hashed_password, district:district || null}
