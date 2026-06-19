@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {sendVerificationEmail} from "../../services/authService"
-import { useNavigate, Link,  useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const VerifyEmailPage =()=>{
 
@@ -11,6 +11,7 @@ const VerifyEmailPage =()=>{
 
     const [isLoading, setIsLoading]= useState(false);
     const [error, setError]= useState("");
+    const [sent, setSent]       = useState(false);
 
     
     
@@ -33,7 +34,7 @@ const VerifyEmailPage =()=>{
         try{
 
             await sendVerificationEmail(email);
-            
+            setSent(true); 
 
         }
         catch(error:any){
@@ -44,11 +45,21 @@ const VerifyEmailPage =()=>{
 
     }
 
+    if (sent) {
+    return (
+      <div>
+        <h2>Check your email</h2>
+        <p>We sent a verification link to {email}. Click it to verify your account.</p>
+        <Link to="/login">Back to login</Link>
+      </div>
+    );
+    }
+
     return(
         <div>
             <h2> verify email page</h2>
 
-            
+            <p>Enter your email to receive a verification link.</p>
 
             {error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -66,11 +77,14 @@ const VerifyEmailPage =()=>{
                 
 
                 <button type="submit" disabled={isLoading}>
-                    {isLoading ? "saving" : "save"}
+                    {isLoading ? "Sending..." : "Send Verification Email"}
                 </button>
 
             </form>
             
+            <p>
+                <Link to="/login">Back to login</Link>
+            </p>
             
 
         </div>
