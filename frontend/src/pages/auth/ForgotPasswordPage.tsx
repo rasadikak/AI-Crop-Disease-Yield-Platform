@@ -1,8 +1,8 @@
 import {useState} from "react";
-import {sendVerificationEmail} from "../../services/authService"
+import {forgotPassword} from "../../services/authService"
 import { Link } from "react-router-dom";
 
-const VerifyEmailPage =()=>{
+const ForgotPasswordPage =()=>{
 
     
     const [email, setEmail]= useState("");
@@ -33,12 +33,12 @@ const VerifyEmailPage =()=>{
 
         try{
 
-            await sendVerificationEmail(email);
+            await forgotPassword(email);
             setSent(true); 
 
         }
         catch(error:any){
-            setError(error.response?.data?.error || "verification mail sent failed");
+            setError(error.response?.data?.error || "password reset link error ");
         }finally{
             setIsLoading(false);
         }
@@ -48,8 +48,8 @@ const VerifyEmailPage =()=>{
     if (sent) {
     return (
       <div>
-        <h2>Check your email</h2>
-        <p>We sent a verification link to {email}. Click it to verify your account.</p>
+        <h2>forgotPassword page</h2>
+        <p>We sent a password reset request link to {email}. Click it to verify your account.</p>
         <Link to="/login">Back to login</Link>
       </div>
     );
@@ -57,9 +57,9 @@ const VerifyEmailPage =()=>{
 
     return(
         <div>
-            <h2> verify email page</h2>
+            <h2> password reset request</h2>
 
-            <p>Enter your email to receive a verification link.</p>
+            <p>Enter your email to receive a reset link.</p>
 
             {error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -77,7 +77,7 @@ const VerifyEmailPage =()=>{
                 
 
                 <button type="submit" disabled={isLoading}>
-                    {isLoading ? "Sending..." : "Send Verification Email"}
+                    {isLoading ? "Sending..." : "Send reset Email"}
                 </button>
 
             </form>
@@ -92,4 +92,4 @@ const VerifyEmailPage =()=>{
     
 };
 
-export default VerifyEmailPage ;
+export default ForgotPasswordPage ;
