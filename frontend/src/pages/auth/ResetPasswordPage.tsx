@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {resetPassword} from "../../services/authService"
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link,  useSearchParams } from "react-router-dom";
 
 const ResetPasswordPage =()=>{
 
@@ -25,19 +25,30 @@ const ResetPasswordPage =()=>{
 
         if (password!=Confirmpassword){
                 setError("passwords are not match");
+                return;
         }
 
         if (password.length < 6) {
             setError("Password must be at least 6 characters");
             return;
         }
+
+        const [searchParams] = useSearchParams();
+        const token = searchParams.get("token");
+
+        if (!token){
+            setError("invalid token or missing reset token ");
+            return;
+        
+
+        }
         setIsLoading(true);
         setError("");
 
         try{
 
-            await resetPassword({password, Confirmpassword});
-            navigate("/login");
+            await resetPassword(token, password, Confirmpassword);
+            navigate("/login?success=password_updated");
 
         }
         catch(error:any){
