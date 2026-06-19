@@ -20,6 +20,19 @@ app.get("/health", (req,res)=>{
 
 
 
+//POST http://localhost:3000/api/auth/register
+//POST http://localhost:3000/api/auth/login
+//POST http://localhost:3000/api/auth/logout
+
+//POST http://localhost:3000/api/auth/forgot-password/request
+//GET  http://localhost:3000/api/auth/forgot-password/reset-link?token=xxx
+//POST http://localhost:3000/api/auth/forgot-password/reset
+
+//POST http://localhost:3000/api/auth/verify-email/request_verify_link
+//GET  http://localhost:3000/api/auth/verify-email/verify?token=xxx
+
+
+
 
 
 
