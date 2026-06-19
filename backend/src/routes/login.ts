@@ -47,3 +47,10 @@ loginRouter.post("/", async (req: Request, res: Response) => {
 });
 
 export default loginRouter;
+
+
+//mock user
+//{
+   // "email":"test@agrisense.com",
+    //"password":"123456"
+//}
