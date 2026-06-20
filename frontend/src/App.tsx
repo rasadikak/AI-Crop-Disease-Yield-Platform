@@ -14,6 +14,7 @@ import VerifyEmailPage    from "./pages/auth/VerifyEmailPage";
 
 import HomePage      from "./pages/HomePage";
 import DashboardPage from "./pages/DashboardPage";
+import ProfilePage from "./pages/ProfilePage";
 
 
 const App=()=>{
@@ -32,6 +33,7 @@ const App=()=>{
             <Route path="/dashboard" element={
             <ProtectedRoute>
               <DashboardPage />
+              <ProfilePage />
             </ProtectedRoute>
           } />
             
