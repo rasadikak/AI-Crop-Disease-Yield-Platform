@@ -13,6 +13,14 @@ const SignupPage =()=>{
     const [isLoading, setIsLoading]= useState(false);
     const [error, setError]= useState("");
 
+    const SRI_LANKA_DISTRICTS = [
+        "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo",
+        "Galle", "Gampaha", "Hambantota", "Jaffna", "Kalutara",
+        "Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar",
+        "Matale", "Matara", "Monaragala", "Mullaitivu", "Nuwara Eliya",
+        "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya"
+        ];
+
     
     const navigate = useNavigate();
 
@@ -82,8 +90,16 @@ const SignupPage =()=>{
                 </div>
 
                 <div>
-                    <label>district</label>
-                    <input type="text" value={district} placeholder="" onChange={(e)=>{setDistict(e.target.value)}}/>
+                    <label>District</label>
+                    <select 
+                        value={district} 
+                        onChange={(e) => setDistict(e.target.value)}
+                    >
+                    <option value="">Select a district</option>
+                        {SRI_LANKA_DISTRICTS.map((d) => (
+                        <option key={d} value={d}>{d}</option>
+                        ))}
+                    </select>
                 </div>
 
                 <button type="submit" disabled={isLoading}>
