@@ -39,7 +39,7 @@ def get_chat_response(message:str, history:list[dict])-> str:
 
     
     chat = client.chats.create(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         config={"system_instruction": FULL_PROMPT},
         history=gemini_history
     )
