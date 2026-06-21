@@ -34,7 +34,7 @@ app.get("/health", (req,res)=>{
 //POST http://localhost:3000/api/auth/verify-email/request_verify_link
 //GET  http://localhost:3000/api/auth/verify-email/verify?token=xxx
 
-//post http://localhost:3000/api/chat
+//post http://localhost:3000/api/chat/message
 
 
 
