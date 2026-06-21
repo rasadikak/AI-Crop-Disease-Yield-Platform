@@ -27,5 +27,23 @@ def get_chat_response(message:str, history:list[dict])-> str:
         facts_section = f"\n\nRelevant facts:\n{facts_text}"
     else:
         facts_section = ""
+ 
+    FULL_PROMPT= SYSTEM_PROMPT + facts_section
+
+    model= genai.GenerativeModel(
+        model_name="gemini-2.0-flash",
+        system_instructions= FULL_PROMPT
+    )
+
+    gemini_history = []
+    for msg in history:
+        role = "model" if msg["role"] == "assistant" else "user"
+        gemini_history.append({"role": role, "parts": [msg["content"]]})
+
+    
+    chat = model.start_chat(history=gemini_history)
+    response = chat.send_message(message)
+
+    return response.text
 
     
