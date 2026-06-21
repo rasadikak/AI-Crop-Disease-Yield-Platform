@@ -16,6 +16,8 @@ import HomePage      from "./pages/HomePage";
 import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 
+import ChatbotPage from "./pages/features/chatbot";
+
 
 const App=()=>{
   return(
@@ -34,6 +36,7 @@ const App=()=>{
             <ProtectedRoute>
               <DashboardPage />
               <ProfilePage />
+              <ChatbotPage />
             </ProtectedRoute>
           } />
             
