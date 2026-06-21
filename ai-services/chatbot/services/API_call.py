@@ -1,11 +1,11 @@
 import os
-import google.generativeai as genai
+import google as genai
 from dotenv import load_dotenv
 from .retrieval import search_knowledge_base
 
 
 load_dotenv()
-genai.configure(api_key= os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 SYSTEM_PROMPT = """You are AgriSense, a helpful farming assistant for Sri Lankan farmers.
 
@@ -30,10 +30,7 @@ def get_chat_response(message:str, history:list[dict])-> str:
  
     FULL_PROMPT= SYSTEM_PROMPT + facts_section
 
-    model= genai.GenerativeModel(
-        model_name="gemini-2.0-flash",
-        system_instructions= FULL_PROMPT
-    )
+    
 
     gemini_history = []
     for msg in history:
@@ -41,7 +38,13 @@ def get_chat_response(message:str, history:list[dict])-> str:
         gemini_history.append({"role": role, "parts": [msg["content"]]})
 
     
-    chat = model.start_chat(history=gemini_history)
+    chat = client.chats.create(
+        model="gemini-2.0-flash",
+        config={"system_instruction": FULL_PROMPT},
+        history=gemini_history
+    )
+
+    
     response = chat.send_message(message)
 
     return response.text
