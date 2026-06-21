@@ -46,4 +46,15 @@ def get_chat_response(message:str, history:list[dict])-> str:
 
     return response.text
 
+
+
+history = []
+
+message = "what fertilizer should I use for tomatoes?"
+
+reply = get_chat_response(message, history)
+
+print("Farmer asked:", message)
+print("\nAI replied:", reply)
     
+
