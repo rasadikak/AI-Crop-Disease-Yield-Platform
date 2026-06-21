@@ -28,3 +28,8 @@ def search_knowledge_base(query: str, top_k:int=3)-> list[dict]:
 
     return top_entries
 
+
+results = search_knowledge_base("what fertilizer should I use for tomatoes")
+for r in results:
+        print(r["topic"], "-", r["content"][:60])
+
