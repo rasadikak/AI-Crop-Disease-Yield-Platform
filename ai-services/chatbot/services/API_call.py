@@ -19,4 +19,13 @@ Rules:
 """
 
 def get_chat_response(message:str, history:list[dict])-> str:
+
+    relevant_facts = search_knowledge_base(message, top_k=3)
+
+    if relevant_facts:
+        facts_text = "\n".join([f"- {f['content']}" for f in relevant_facts])
+        facts_section = f"\n\nRelevant facts:\n{facts_text}"
+    else:
+        facts_section = ""
+
     
