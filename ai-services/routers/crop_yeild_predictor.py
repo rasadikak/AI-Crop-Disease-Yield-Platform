@@ -1,4 +1,4 @@
-
+"""
 from fastapi import APIRouter
 import pandas as pd
 import joblib
@@ -48,3 +48,6 @@ def crop_yeild_predictor(crop: str, year: int, temp: float, pesticides: float) -
     "confidence_low": round(float(lower), 2),
     "confidence_high": round(float(upper), 2)
 }
+
+
+"""

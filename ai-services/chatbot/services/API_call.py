@@ -1,7 +1,8 @@
 import os
 from google import genai   
 from dotenv import load_dotenv
-from retrieval import search_knowledge_base
+
+from chatbot.services.retrieval import search_knowledge_base
 
 
 load_dotenv()
@@ -18,39 +19,42 @@ Rules:
 - Be warm and respectful in tone
 """
 
-def get_chat_response(message:str, history:list[dict])-> str:
-
-    relevant_facts = search_knowledge_base(message, top_k=3)
+def get_chat_response(message: str, history: list[dict]) -> str:
+    try:
+       
+        relevant_facts = search_knowledge_base(message, top_k=3)
+    except Exception as e:
+        print(f"Knowledge base search failed: {e}")
+        relevant_facts = []  # fail gracefully, continue without facts
 
     if relevant_facts:
         facts_text = "\n".join([f"- {f['content']}" for f in relevant_facts])
         facts_section = f"\n\nRelevant facts:\n{facts_text}"
     else:
         facts_section = ""
- 
-    FULL_PROMPT= SYSTEM_PROMPT + facts_section
 
-    
+    full_system_prompt = SYSTEM_PROMPT + facts_section
 
     gemini_history = []
     for msg in history:
         role = "model" if msg["role"] == "assistant" else "user"
-        gemini_history.append({"role": role, "parts": [msg["content"]]})
+        gemini_history.append({"role": role, "parts": [{"text": msg["content"]}]})
 
-    
-    chat = client.chats.create(
-        model="gemini-2.5-flash",
-        config={"system_instruction": FULL_PROMPT},
-        history=gemini_history
-    )
+    try:
+        chat = client.chats.create(
+            model="gemini-2.5-flash",
+            config={"system_instruction": full_system_prompt},
+            history=gemini_history
+        )
 
-    
-    response = chat.send_message(message)
+        response = chat.send_message(message)
+        return response.text
 
-    return response.text
-
-
-
+    except Exception as e:
+        print(f"Gemini API call failed: {e}")
+        
+        raise RuntimeError("Failed to get response from AI service") from e
+"""
 history = []
 
 message = "what fertilizer should I use for tomatoes?"
@@ -60,4 +64,4 @@ reply = get_chat_response(message, history)
 print("Farmer asked:", message)
 print("\nAI replied:", reply)
     
-
+"""

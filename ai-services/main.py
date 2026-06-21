@@ -5,5 +5,5 @@ app= FastAPI()
 
 
 
-app.include_router(crop_yeild_predictor.router)
+#app.include_router(crop_yeild_predictor.router)
 app.include_router(chatbot.router)
