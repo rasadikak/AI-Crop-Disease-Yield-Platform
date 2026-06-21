@@ -1,7 +1,7 @@
 import os
-import google as genai
+from google import genai   
 from dotenv import load_dotenv
-from .retrieval import search_knowledge_base
+from retrieval import search_knowledge_base
 
 
 load_dotenv()
