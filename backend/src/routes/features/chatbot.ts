@@ -16,7 +16,45 @@ chatRouter.post("/message",authMiddleware,async(req:AuthRequest, res:Response)=>
     }
 
     try{
-        
+        await prisma.chatMessage.create({
+        data: {
+            farmerId: farmerId as number,
+            role: "user",
+            content: message
+            }
+        });
+
+        const recentMessages = await prisma.chatMessage.findMany({
+            where: { farmerId },
+            orderBy: { createdAt: "desc" },
+            skip: 1,     // skip the message we just saved
+            take: 10
+        });
+
+        // reverse so it's oldest-first
+        const history = recentMessages.reverse().map(msg => ({
+            role: msg.role,
+            content: msg.content
+        }));
+
+        const aiResponse = await axios.post(`${process.env.FASTAPI_URL}/chat/`, {
+            message,
+            history
+        });
+
+        const reply = aiResponse.data.reply;
+
+        await prisma.chatMessage.create({
+        data: {
+            farmerId: farmerId as number,
+            role: "assistant",
+            content: reply
+        }
+        });
+
+        res.json({ reply });
+
+
 
     }
     catch(error){
