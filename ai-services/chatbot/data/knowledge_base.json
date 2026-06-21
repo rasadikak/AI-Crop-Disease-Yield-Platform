@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "topic": "planting_time",
+    "crop": "rice",
+    "keywords": ["rice", "paddy", "plant", "planting", "sow", "sowing", "season", "maha", "yala"],
+    "content": "Rice in Sri Lanka is grown in two main seasons. Maha season runs from October to March, coinciding with the North-East monsoon, and generally gives higher yields due to more reliable rainfall. Yala season runs from April to September, relying more on irrigation. Land preparation should begin 2-3 weeks before the expected onset of rains."
+  },
+  {
+    "id": 2,
+    "topic": "planting_time",
+    "crop": "tomato",
+    "keywords": ["tomato", "plant", "planting", "sow", "season", "nursery"],
+    "content": "Tomatoes are best planted at the start of both Yala and Maha seasons. Seeds are first raised in a nursery for 3-4 weeks before transplanting seedlings to the main field, spaced approximately 60cm x 45cm apart."
+  },
+  {
+    "id": 3,
+    "topic": "planting_time",
+    "crop": "chili",
+    "keywords": ["chili", "chilli", "plant", "planting", "sow", "season"],
+    "content": "Chili is typically planted at the beginning of Maha season for the main crop, with a secondary planting possible in Yala if irrigation is available. Nursery raising takes about 4-5 weeks before transplanting."
+  },
+  {
+    "id": 4,
+    "topic": "fertilizer",
+    "crop": "rice",
+    "keywords": ["rice", "paddy", "fertilizer", "fertiliser", "npk", "urea", "nutrients"],
+    "content": "Rice fertilizer is typically applied in 3 splits: basal application at planting, first top-dressing at 30 days after planting, and second top-dressing at panicle initiation stage (around 50-55 days). Urea, TSP, and MOP are commonly used based on soil test recommendations."
+  },
+  {
+    "id": 5,
+    "topic": "fertilizer",
+    "crop": "tomato",
+    "keywords": ["tomato", "fertilizer", "fertiliser", "npk", "nutrients"],
+    "content": "Tomatoes need NPK fertilizer around a 15:15:15 ratio during early vegetative growth, shifting to higher potassium content (such as 10:10:20) during flowering and fruiting to support fruit development and quality."
+  },
+  {
+    "id": 6,
+    "topic": "fertilizer",
+    "crop": "chili",
+    "keywords": ["chili", "chilli", "fertilizer", "fertiliser", "npk", "nutrients"],
+    "content": "Chili benefits from balanced NPK fertilizer at planting, with additional nitrogen top-dressing during vegetative growth and increased potassium during flowering and fruit set to improve yield and fruit quality."
+  },
+  {
+    "id": 7,
+    "topic": "disease_symptoms",
+    "crop": "tomato",
+    "keywords": ["tomato", "early blight", "disease", "spots", "leaves", "symptoms"],
+    "content": "Early blight in tomatoes appears as dark brown spots with concentric rings (target-board pattern) on older, lower leaves first. Affected leaves often yellow around the spots and eventually drop. It spreads faster in warm, humid conditions."
+  },
+  {
+    "id": 8,
+    "topic": "disease_symptoms",
+    "crop": "tomato",
+    "keywords": ["tomato", "late blight", "disease", "spots", "leaves", "symptoms"],
+    "content": "Late blight causes irregular, water-soaked dark green to brown patches on leaves, often with a pale green-yellow border. White fungal growth may appear on the underside of leaves in humid conditions. It spreads rapidly and can destroy a crop within days if untreated."
+  },
+  {
+    "id": 9,
+    "topic": "disease_symptoms",
+    "crop": "rice",
+    "keywords": ["rice", "paddy", "blast", "disease", "spots", "leaves", "symptoms"],
+    "content": "Rice blast disease shows as diamond or spindle-shaped lesions with gray centers and brown borders on leaves. In severe cases it affects the neck of the panicle, causing it to break and resulting in significant yield loss."
+  },
+  {
+    "id": 10,
+    "topic": "pest_control",
+    "crop": "rice",
+    "keywords": ["rice", "paddy", "pest", "insect", "brown planthopper", "control"],
+    "content": "Brown planthopper is a major rice pest that causes 'hopper burn' - yellowing and drying of plants in patches. Avoid excessive nitrogen fertilizer, maintain proper plant spacing for airflow, and use recommended insecticides only when population thresholds are exceeded."
+  },
+  {
+    "id": 11,
+    "topic": "pest_control",
+    "crop": "tomato",
+    "keywords": ["tomato", "pest", "insect", "fruit borer", "control"],
+    "content": "Tomato fruit borer larvae bore into fruits, causing direct crop loss and entry points for rot. Regular field monitoring, removal of affected fruits, and pheromone traps are effective alongside targeted insecticide use when necessary."
+  },
+  {
+    "id": 12,
+    "topic": "irrigation",
+    "crop": "rice",
+    "keywords": ["rice", "paddy", "irrigation", "water", "flooding"],
+    "content": "Rice generally requires standing water of 5-10cm depth during most of the vegetative and reproductive stages. Water should be drained about 2 weeks before harvest to allow the field to dry for easier harvesting."
+  },
+  {
+    "id": 13,
+    "topic": "irrigation",
+    "crop": "tomato",
+    "keywords": ["tomato", "irrigation", "water", "watering"],
+    "content": "Tomatoes need consistent moisture, especially during flowering and fruiting. Drip irrigation is recommended over overhead watering to reduce leaf wetness and lower the risk of fungal diseases like blight."
+  },
+  {
+    "id": 14,
+    "topic": "general",
+    "crop": "all",
+    "keywords": ["soil test", "soil testing", "ph", "nutrients"],
+    "content": "Soil testing before each cropping season helps determine the exact fertilizer needs of your land. Sri Lanka's Department of Agriculture offers soil testing services through regional agricultural offices and extension centers."
+  },
+  {
+    "id": 15,
+    "topic": "general",
+    "crop": "all",
+    "keywords": ["district", "extension", "agriculture office", "advice", "officer"],
+    "content": "Each district in Sri Lanka has an Agriculture Extension Office that provides free advisory services, soil testing, and seasonal crop recommendations specific to local conditions. Farmers are encouraged to consult their local Agriculture Instructor (Krishi Niyamaka) for region-specific guidance."
+  }
+]
