@@ -34,5 +34,5 @@ model chatMessage{
   content   String
   createdAt DateTime @default(now())
 
-  farmer Farmer @relation(fileds: [farmerId], refererences:[id], onDelete: Cascade)
+  farmer Farmer @relation(fileds: [farmerId], references:[id], onDelete: Cascade)
 }
