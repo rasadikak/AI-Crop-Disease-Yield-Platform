@@ -4,7 +4,9 @@
 const ChatbotPage=()=>{
 
     return (
-        <div>chatbot page</div>
+        <div>
+            
+        </div>
     );
 };
 
