@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import api from "../../services/api";
 
@@ -16,6 +16,25 @@ const ChatbotPage=()=>{
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen]       = useState(false);
     const [error, setError]         = useState("");
+
+    //used for auto-scroll
+    const bottomRef= useRef<HTMLDivElement>(null);
+
+    const {token}= useAuth();
+
+     // auto-scroll to bottom every time messages update
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    const handleSend= async()=>{
+        if(!input.trim() || isLoading){
+            return;
+        }
+        const userMessage= input.trim();
+        setInput("");
+        setError("");
+    }
 
     return (
         <div>
