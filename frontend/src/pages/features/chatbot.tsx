@@ -34,6 +34,10 @@ const ChatbotPage=()=>{
         const userMessage= input.trim();
         setInput("");
         setError("");
+
+        // add user message to UI immediately — don't wait for the API
+        setMessages(prev => [...prev, { role: "user", content: userMessage }]);
+        
     }
 
     return (
