@@ -38,4 +38,9 @@ export const sendVerificationEmail = async (email: string): Promise<void> => {
 };
 
 
+export const chatbot= async()=>{
+  await api.post("/api/chat/message",)
+};
+
+
 
