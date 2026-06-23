@@ -55,7 +55,8 @@ const authMiddleware = async (
   next: NextFunction
 ) => {
  
-  
+  console.log("Auth header received:", req.headers.authorization);
+
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -69,7 +70,7 @@ const authMiddleware = async (
 
   try {
     
-    const farmerId = verifyToken(token);
+    const farmerId = await verifyToken(token);
 
     // fetch farmer from database
  
