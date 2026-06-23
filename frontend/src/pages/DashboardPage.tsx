@@ -1,6 +1,6 @@
 const DashboardPage=()=>{
     return(
-        <div>VerifyEmailPage</div>
+        <div>dahsboard</div>
     );
 };
 

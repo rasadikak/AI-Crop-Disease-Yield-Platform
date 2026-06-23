@@ -22,9 +22,9 @@ export const sendEmail= async(
 ): Promise<void>=>{
     const baseURL= process.env.FRONTEND_URL;
 
-     const link = type === "verification"
-    ? `${baseURL}/verify-email?token=${token}`
-    : `${baseURL}/reset-password?token=${token}`;
+    const link = type === "verification"
+    ? `${process.env.BACKEND_URL}/api/auth/verify-email/verify?token=${token}`
+    : `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
 
   
     const subject = type === "verification"
