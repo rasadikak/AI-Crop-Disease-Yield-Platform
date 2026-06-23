@@ -35,7 +35,7 @@ const LoginPage =()=>{
 
             loginUser(response);
 
-            navigate("/DashboardPage");
+            navigate("/dashboard");
 
         } catch(error:any){
             setError(error.response?.data?.error || "Login failed");
@@ -85,6 +85,10 @@ const LoginPage =()=>{
             </p>
             <p>
                 <Link to="/forgot-password">Forgot password?</Link>
+            </p>
+
+            <p>
+                <Link to="/verify-email">Didnt verfy your email? verify here</Link>
             </p>
 
         </div>

@@ -20,7 +20,11 @@ const SignupPage =()=>{
         "Matale", "Matara", "Monaragala", "Mullaitivu", "Nuwara Eliya",
         "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya"
         ];
-
+    const validateEmail = (email: string): boolean => {
+  
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
     
     const navigate = useNavigate();
 
@@ -40,13 +44,18 @@ const SignupPage =()=>{
             setError("Password must be at least 6 characters");
             return;
         }
+
+        if (!validateEmail(email)) {
+            setError("Please enter a valid email address");
+            return;
+        }
         setIsLoading(true);
         setError("");
 
         try{
 
             await register({name,email,password,district});
-            navigate("/login");
+            navigate("/verify-email");
 
         }
         catch(error:any){
