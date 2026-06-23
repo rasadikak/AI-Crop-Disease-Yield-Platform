@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import { hashPassword } from "../utils/password";
+import { hashPassword , validatePassword} from "../utils/password";
 import prisma from "../models/prisma";
 
 const registerRouter= Router();
@@ -13,10 +13,13 @@ registerRouter.post("/", async(req:Request, res:Response)=>{
         return;
     }
 
-    if (password.length <6){
-        res.status(400).json({ error: "Password must be at least 6 characters" });
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+        res.status(400).json({ error: passwordError });
         return;
     }
+
+    
 
     try{
 
