@@ -35,7 +35,7 @@ const LoginPage =()=>{
 
             loginUser(response);
 
-            navigate("/dahsboard");
+            navigate("/DashboardPage");
 
         } catch(error:any){
             setError(error.response?.data?.error || "Login failed");

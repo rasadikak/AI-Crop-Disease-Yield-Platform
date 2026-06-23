@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import prisma from "../models/prisma";
 import { sendEmail } from "../services/sendEmail";
 import { createResetToken, verifyResetToken } from "../middleware/auth";
-import { hashPassword } from "../utils/password";
+import { hashPassword, validatePassword } from "../utils/password";
 
 const forgotPasswordRouter = Router();
 
@@ -87,8 +87,9 @@ forgotPasswordRouter.post("/reset", async (req: Request, res: Response) => {
     return;
   }
 
-  if (newPassword.length < 6) {
-    res.status(400).json({ error: "Password must be at least 6 characters" });
+  const passwordError = validatePassword(newPassword);
+  if (passwordError) {
+    res.status(400).json({ error: passwordError });
     return;
   }
 
