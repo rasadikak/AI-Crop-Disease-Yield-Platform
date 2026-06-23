@@ -23,6 +23,11 @@ loginRouter.post("/", async (req: Request, res: Response) => {
 
     const passwordMatch = await verifyPassword(password, farmer.password);
 
+    if (!farmer.isVerified) {
+      res.status(403).json({ error: "Please verify your email before logging in" });
+      return;
+    }
+
     if (!passwordMatch) {
       res.status(401).json({ error: "Invalid credentials" });
       return;
