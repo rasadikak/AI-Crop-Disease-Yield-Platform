@@ -33,12 +33,18 @@ const App=()=>{
             <Route path="/verify-email"   element={<VerifyEmailPage />} />
 
             <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <DashboardPage />
-              <ProfilePage />
-              <ChatbotPage />
-            </ProtectedRoute>
-          } />
+            <ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+
+            <Route path="/profile" element={
+            <ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+
+            <Route path="/chatbot" element={
+            <ProtectedRoute><ChatbotPage /></ProtectedRoute>} />
+
+
+
+
+            
             
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
