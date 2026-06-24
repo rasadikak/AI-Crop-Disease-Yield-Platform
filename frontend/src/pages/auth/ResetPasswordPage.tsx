@@ -12,6 +12,9 @@ const ResetPasswordPage =()=>{
     const [isLoading, setIsLoading]= useState(false);
     const [error, setError]= useState("");
 
+    const [searchParams] = useSearchParams();
+    const token = searchParams.get("token");
+
     
     const navigate = useNavigate();
 
@@ -33,8 +36,7 @@ const ResetPasswordPage =()=>{
             return;
         }
 
-        const [searchParams] = useSearchParams();
-        const token = searchParams.get("token");
+        
 
         if (!token){
             setError("invalid token or missing reset token ");
