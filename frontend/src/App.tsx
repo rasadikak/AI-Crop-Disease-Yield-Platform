@@ -17,6 +17,9 @@ import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 
 import ChatbotPage from "./pages/features/chatbot";
+import CropYeildPredictorPage from "./pages/features/crop_yeild_predictor";
+import PlantDiseaseClassifierPage from "./pages/features/plant_disease_classifer";
+import WeatherAnomalyDetectorPage from "./pages/features/weather_anomaly_detector";
 
 
 const App=()=>{
@@ -40,6 +43,15 @@ const App=()=>{
 
             <Route path="/chatbot" element={
             <ProtectedRoute><ChatbotPage /></ProtectedRoute>} />
+
+            <Route path="/CropYeildPredictor" element={
+            <ProtectedRoute><CropYeildPredictorPage /></ProtectedRoute>} />
+
+            <Route path="/PlantDiseaseClassifier" element={
+            <ProtectedRoute><PlantDiseaseClassifierPage /></ProtectedRoute>} />
+
+            <Route path="/WeatherAnomalyDetector" element={
+            <ProtectedRoute><WeatherAnomalyDetectorPage /></ProtectedRoute>} />
 
 
 
