@@ -1,4 +1,4 @@
-import {Router} from "express";
+import {Router, Response} from "express";
 import authMiddleware, {AuthRequest} from "../middleware/auth";
 
 const profileRouter= Router();
@@ -6,7 +6,7 @@ const profileRouter= Router();
 
 
 
-profileRouter.post("/", authMiddleware,async()=>{
+profileRouter.post("/", authMiddleware,async(req:AuthRequest, res:Response)=>{
 
 });
 
