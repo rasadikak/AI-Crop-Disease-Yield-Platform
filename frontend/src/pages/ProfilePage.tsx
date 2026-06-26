@@ -10,6 +10,8 @@ const ProfilePage=()=>{
     const [isLoading, setIsLoading]= useState(false);
     const [error, setError]= useState("");
 
+    
+
 
     return (
         <div>
@@ -29,7 +31,7 @@ const ProfilePage=()=>{
         <br></br>
 
         change Password
-        <Link to="/ForgotPasswordPage"></Link>
+        <Link to="/forgot-password"></Link>
 
         <br></br>
 
