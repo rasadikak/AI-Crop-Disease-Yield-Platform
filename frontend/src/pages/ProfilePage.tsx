@@ -22,7 +22,7 @@ const ProfilePage=()=>{
         <input type="text" name="email" value={}></input>
 
         change Password
-        <Link to=""></Link>
+        <Link to="/ForgotPasswordPage"></Link>
 
         signout
         <Link to=""></Link>
