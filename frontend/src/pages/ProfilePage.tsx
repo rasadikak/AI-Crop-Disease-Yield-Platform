@@ -1,8 +1,11 @@
 
 import {Link} from "react-router-dom";
+import {useState} from "react";
 
 const ProfilePage=()=>{
 
+    const [name,setName]= useState("");
+    const [email, setEmail]= useState("");
 
 
     return (
