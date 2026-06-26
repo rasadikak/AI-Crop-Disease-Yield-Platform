@@ -39,4 +39,16 @@ profileRouter.put("/update-district", async(req:AuthRequest, res:Response)=>{
 
 });
 
+//delete account
+
+profileRouter.delete("/delete-account", async(req:AuthRequest, res:Response)=>{
+    try{
+
+    }catch(error:any){
+        console.error("can not delete account:", error);
+        res.status(500).json({error:"Failed delete account"});
+    }
+
+});
+
 export default profileRouter;
