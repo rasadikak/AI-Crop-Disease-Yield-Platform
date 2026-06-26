@@ -52,3 +52,8 @@ profileRouter.delete("/delete-account", async(req:AuthRequest, res:Response)=>{
 });
 
 export default profileRouter;
+
+
+//mulinm profile.ts eke routers hadla
+//frontend ekata e tika aran
+//profilepage,tsx hadala connect krnn
