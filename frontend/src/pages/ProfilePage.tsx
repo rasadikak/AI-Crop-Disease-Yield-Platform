@@ -7,6 +7,9 @@ const ProfilePage=()=>{
     const [name,setName]= useState("");
     const [email, setEmail]= useState("");
 
+    const [isLoading, setIsLoading]= useState(false);
+    const [error, setError]= useState("");
+
 
     return (
         <div>
