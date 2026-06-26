@@ -15,20 +15,30 @@ const ProfilePage=()=>{
         <h3>Mange your account and preferences </h3> 
 
         your name
-        <input type="text" name="name" value={}></input>
+        <input type="text" name="name" value={name}></input>
         <button>Edit name</button>
 
+        <br></br>
+
         email_address
-        <input type="text" name="email" value={}></input>
+        <input type="text" name="email" value={email}></input>
+
+        <br></br>
 
         change Password
         <Link to="/ForgotPasswordPage"></Link>
 
+        <br></br>
+
         signout
         <Link to=""></Link>
 
+        <br></br>
+
         delete_account
         <Link to=""></Link>
+
+        <br></br>
 
         </div>
 
