@@ -1,7 +1,9 @@
 
-import {Link} from "react-router-dom"
+import {Link} from "react-router-dom";
 
 const ProfilePage=()=>{
+
+
 
     return (
         <div>
@@ -21,7 +23,14 @@ const ProfilePage=()=>{
 
         signout
         <Link to=""></Link>
+
+        delete_account
+        <Link to=""></Link>
+
         </div>
+
+        
+        
 
     );
 };
