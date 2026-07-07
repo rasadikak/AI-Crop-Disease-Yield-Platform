@@ -5,7 +5,7 @@ import type{ReactNode} from "react";
 
 
 
-const protectedRoute=  ({children}:{children:ReactNode})=>{
+const ProtectedRoute=  ({children}:{children:ReactNode})=>{
     const {token, isLoading}= useAuth();
 
   
@@ -23,4 +23,4 @@ const protectedRoute=  ({children}:{children:ReactNode})=>{
 
 };
 
-export default protectedRoute;
+export default ProtectedRoute;
