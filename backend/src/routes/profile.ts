@@ -67,6 +67,11 @@ profileRouter.put("/update-district",authMiddleware, async(req:AuthRequest, res:
             return;
         }
 
+        if (!new_district || typeof new_district !== "string" || !new_district.trim()) {
+        res.status(400).json({ error: "District is required" });
+        return;
+            }
+
         
 
         const existing = await prisma.farmer.findUnique({ where: { id: userId } });
@@ -107,7 +112,7 @@ profileRouter.delete("/delete-account", authMiddleware,async(req:AuthRequest, re
         }
 
         await prisma.farmer.delete({where:{id:userId}});
-        res.json({message:"user `${userId} deleted successfully`"});
+        res.json({message:`user ${userId} deleted successfully`});
 
 
 
