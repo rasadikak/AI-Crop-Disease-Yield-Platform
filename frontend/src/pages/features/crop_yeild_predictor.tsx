@@ -17,6 +17,8 @@ const CropYieldPredictorPage=()=>{
     const [result, setResult] = useState<any>(null);
 
     const handleSubmit= async(e:React.FormEvent)=>{
+
+        console.log("handleSubmit fired");
         e.preventDefault();
         setError("");
 
@@ -124,6 +126,8 @@ const CropYieldPredictorPage=()=>{
 
             </form>
             
+            {error && <p style={{ color: "red" }}>{error}</p>}
+
             {result && (
                 <div className="result">
                     Predicted yield: {result.pred}

@@ -1,15 +1,13 @@
 
-import {Link} from "react-router-dom";
-import {useState} from "react";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import useAuth from "../hooks/useAuth";
 
-const ProfilePage=()=>{
-
-    const [name,setName]= useState("");
-    const [email, setEmail]= useState("");
-    const [district, setDistrict]= useState("");
-
-    const [isLoading, setIsLoading]= useState(false);
-    const [error, setError]= useState("");
+const ProfilePage = () => {
+    const { farmer } = useAuth();
+    const [name, setName] = useState(farmer?.name ?? "");
+    const [email, setEmail] = useState(farmer?.email ?? "");
+    const [district, setDistrict] = useState(farmer?.district ?? "");
 
     const SRI_LANKA_DISTRICTS = [
         "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo",
@@ -26,16 +24,16 @@ const ProfilePage=()=>{
         <div>
         <div>Your profile</div>
 
-        <h3>Mange your account and preferences </h3> 
+        <h3>Mange your account and preferences </h3>
 
         your name
-        <input type="text" name="name" value={name}></input>
+        <input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
         <button>Edit name</button>
 
         <br></br>
 
         email_address
-        <input type="text" name="email" value={email}></input>
+        <input type="text" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
         <br></br>
 

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import useAuth from "../../hooks/useAuth";
 import api from "../../services/api";
 
 
@@ -19,8 +18,6 @@ const ChatbotPage=()=>{
 
     //used for auto-scroll
     const bottomRef= useRef<HTMLDivElement>(null);
-
-    const {token}= useAuth();
 
      // auto-scroll to bottom every time messages update
     useEffect(() => {
