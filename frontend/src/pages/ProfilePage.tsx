@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import api from "../services/api"
+import { useNavigate } from "react-router-dom";
+
+const navigate = useNavigate();
+
 
 const ProfilePage = () => {
     const { farmer } = useAuth();
@@ -68,6 +72,29 @@ const ProfilePage = () => {
     };
     
 
+    //delete account
+
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [deleteError, setDeleteError] = useState("");
+
+    const handleDeleteAccount = async () => {
+        setIsDeleting(true);
+        setDeleteError("");
+        try {
+            await api.delete("/auth/profile/delete-account");
+
+            
+            localStorage.removeItem("token");
+
+            navigate("/login");
+        } catch (error: any) {
+            setDeleteError(error.response?.data?.error || "Failed to delete account");
+        } finally {
+            setIsDeleting(false);
+            setShowDeleteConfirm(false);
+        }
+    };
 
 
     return (
@@ -135,26 +162,38 @@ const ProfilePage = () => {
 
         <br></br>
 
-        change Password
-        <Link to="/forgot-password"></Link>
+        
+        <Link to="/forgot-password">change Password</Link>
 
         <br></br>
 
-        signout
-        <Link to=""></Link>
+        
+        <Link to="/">signout</Link>
 
         <br></br>
+        
+        <div className="delAccountDiv">
+        <button onClick={() => setShowDeleteConfirm(true)}>Delete account</button>
 
-        delete_account
-        <Link to=""></Link>
+        {showDeleteConfirm && (
+            <div className="confirmDialog">
+                <p>Are you sure you want to delete your account? This cannot be undone.</p>
+                <button onClick={handleDeleteAccount} disabled={isDeleting}>
+                    {isDeleting ? "Deleting..." : "Yes, delete my account"}
+                </button>
+                <button onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting}>
+                    Cancel
+                </button>
+            </div>
+        )}
 
-        <br></br>
-
+        {deleteError && <p style={{ color: "red" }}>{deleteError}</p>}
         </div>
+        
 
         
         
-
+    </div>
     );
 };
 
