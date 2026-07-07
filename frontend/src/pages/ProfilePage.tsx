@@ -31,8 +31,9 @@ const ProfilePage = () => {
         if (!draftName.trim()) return;
         setName(draftName.trim());
         setIsNameEditing(false);
+        const new_name=draftName.trim()
         
-        await api.put("/auth/profile/update-name", { name: draftName.trim() });
+        api.put("/auth/profile/update-name", { new_name: new_name });
     };
 
     const handleNameEditCancel = () => {
@@ -40,6 +41,32 @@ const ProfilePage = () => {
         setIsNameEditing(false);
     };
 
+
+    //edit district 
+    const [isDistrictEditing, setIsDistrictEditing] = useState(false);
+    const [draftDistrict, setDraftDistrict] = useState(district);
+
+    const handleDistrictEditClick = () => {
+        setDraftDistrict(district);
+        setIsDistrictEditing(true);
+    };
+
+    const handleDistrictSave = async () => {
+        if (!draftDistrict) return;
+        try {
+            await api.put("/auth/profile/update-district", { new_district: draftDistrict });
+            setDistrict(draftDistrict);
+            setIsDistrictEditing(false);
+        } catch (error: any) {
+            console.error("Failed to update district:", error);
+        }
+    };
+
+    const handleDistrictEditCancel = () => {
+        setDraftDistrict(district);
+        setIsDistrictEditing(false);
+    };
+    
 
 
 
@@ -49,7 +76,7 @@ const ProfilePage = () => {
 
         <h3>Mange your account and preferences </h3>
 
-        <div>
+        <div className="editNameDiv">
             <label>name</label>
             
             {isNameEditing ? (
@@ -82,15 +109,29 @@ const ProfilePage = () => {
 
         <br></br>
 
-        district
-        <select value={district} onChange={(e) => setDistrict(e.target.value)}>
-                    
-        <option value="">Select a district</option>
-            {SRI_LANKA_DISTRICTS.map((d) => (
-                        <option key={d} value={d}>{d}</option>
-                        ))}
-        </select>
-        <button>change district</button>
+        <div className="editDistrictDiv">
+                <label>district</label>
+                {isDistrictEditing ? (
+                    <>
+                        <select
+                            value={draftDistrict}
+                            onChange={(e) => setDraftDistrict(e.target.value)}
+                        >
+                            <option value="">Select a district</option>
+                            {SRI_LANKA_DISTRICTS.map((d) => (
+                                <option key={d} value={d}>{d}</option>
+                            ))}
+                        </select>
+                        <button onClick={handleDistrictSave}>Save</button>
+                        <button onClick={handleDistrictEditCancel}>Cancel</button>
+                    </>
+                ) : (
+                    <>
+                        <span>{district || "Not set"}</span>
+                        <button onClick={handleDistrictEditClick}>Change district</button>
+                    </>
+                )}
+        </div>
 
         <br></br>
 

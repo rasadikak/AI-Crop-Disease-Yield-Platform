@@ -24,9 +24,9 @@ profileRouter.put("/update-name", authMiddleware,async(req:AuthRequest, res:Resp
             return;
         }
 
-        const updated_name = new_name.trim();
+        
 
-        if (updated_name.length < 2 || updated_name.length > 100) {
+        if (new_name.length < 2 || new_name.length > 100) {
             res.status(400).json({ error: "Name must be between 2 and 100 characters" });
             return;
         }
@@ -39,7 +39,7 @@ profileRouter.put("/update-name", authMiddleware,async(req:AuthRequest, res:Resp
 
         await prisma.farmer.update({
             where:{id:userId},
-            data:{name:updated_name}
+            data:{name:new_name}
         });
         res.json({ message: "name updated successfully" });
 
