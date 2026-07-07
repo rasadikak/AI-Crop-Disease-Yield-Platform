@@ -106,7 +106,10 @@ profileRouter.delete("/delete-account", authMiddleware,async(req:AuthRequest, re
             return;
         }
 
-        
+        await prisma.farmer.delete({where:{id:userId}});
+        res.json({message:"user `${userId} deleted successfully`"});
+
+
 
     }catch(error:any){
         console.error("can not delete account:", error);
