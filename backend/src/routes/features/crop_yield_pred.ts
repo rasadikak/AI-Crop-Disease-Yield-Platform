@@ -12,6 +12,7 @@ crop_pred_router.post("/", authMiddleware,async(req:AuthRequest, res:Response)=>
 
     if (!crop || !year || !temp || !pesticides){
         res.status(400).json({error:"all field are required"});
+        return;
     };
 
     try{
@@ -20,11 +21,16 @@ crop_pred_router.post("/", authMiddleware,async(req:AuthRequest, res:Response)=>
             crop, year, temp, pesticides
         });
 
-        const pred= ai_response.data.res;
+        const pred= ai_response.data;
 
         res.json({pred});
 
     }catch(error:any){
+
+        if (error.response?.status === 400) {
+        res.status(400).json({ error: error.response.data.detail });
+        return;
+        }
         console.error("crop yield pred  error", error);
         res.status(500).json({error:"Failed to process"});
     }
