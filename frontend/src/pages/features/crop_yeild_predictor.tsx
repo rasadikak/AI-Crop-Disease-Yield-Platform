@@ -1,4 +1,5 @@
-import  {useState} from "react"
+import  {useState} from "react";
+import api from "../../services/api";
 
 const CropYieldPredictorPage=()=>{
 
@@ -13,21 +14,55 @@ const CropYieldPredictorPage=()=>{
     const [isLoading, setIsLoading]= useState(false);
     const [error, setError]= useState("");
 
+    const [result, setResult] = useState<any>(null);
+
     const handleSubmit= async(e:React.FormEvent)=>{
         e.preventDefault();
+        setError("");
 
         if(!crop || !year || !temp || !pesticides){
             setError("All fields are required");
             return;
         }
 
+        const yearNum = Number(year);
+        const tempNum = Number(temp);
+        const pesticidesNum = Number(pesticides);
+        const currentYear = new Date().getFullYear();
+
+        if (!Number.isFinite(yearNum) || yearNum < 2000 || yearNum > currentYear + 10) {
+            setError(`Year must be between 2000 and ${currentYear + 10}`);
+            return;
+        }
+
+        if (!Number.isFinite(tempNum) || tempNum < -20 || tempNum > 55) {
+            setError("Temperature must be between -20°C and 55°C");
+            return;
+        }
+
+        if (!Number.isFinite(pesticidesNum) || pesticidesNum < 0) {
+            setError("Pesticides must be a positive number");
+            return;
+        }
+
+        
+
         setIsLoading(true);
         setError("");
 
         try{
 
+            const res= await api.post("/crop_pred_predictor",{
+                crop:crop,
+                year:yearNum,
+                temp:tempNum,
+                pesticides:pesticidesNum
+            });
+
+            setResult(res.data);
+
         }catch(error:any){
-            setError(error.response?.data?.error || "signup failed");
+            setError(error.response?.data?.error || "request failed");
             return;
         }finally{
             setIsLoading(false);
@@ -56,17 +91,29 @@ const CropYieldPredictorPage=()=>{
 
                 <div>
                     <label>year</label>
-                    <input type="number" value={year} placeholder="2026" onChange={(e)=>{setYear(e.target.value)}}></input>
+                    <input
+                        type="number" value={year} placeholder="2026"
+                        min={2000} max={new Date().getFullYear() + 10}
+                        step={1} onChange={(e) => setYear(e.target.value)}
+                    />
                 </div>
 
                 <div>
                     <label>temperature(C)</label>
-                    <input type="number" placeholder="27" value={temp} onChange={(e)=>{setTemp(e.target.value)}}></input>
+                    <input
+                        type="number" value={temp} placeholder="27"
+                        min={-20} max={55} step={0.1}
+                        onChange={(e) => setTemp(e.target.value)}
+                    />
                 </div>
 
                 <div>
                     <label>pesticides_tonnes</label>
-                    <input type="number" value={pesticides} placeholder="100" onChange={(e)=>{setPesticides(e.target.value)}}></input>
+                    <input
+                        type="number" value={pesticides} placeholder="100"
+                        min={0} step={0.01}
+                        onChange={(e) => setPesticides(e.target.value)}
+                    />
                 </div>
 
                 <div>
@@ -76,10 +123,14 @@ const CropYieldPredictorPage=()=>{
                 </div>
 
             </form>
+            
+            {result && (
+                <div className="result">
+                    Predicted yield: {result.pred}
 
-            <div className="result">
-
-            </div>
+                </div>
+            )}
+            
         </div>
     )
 
