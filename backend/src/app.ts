@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import authRouter from "./auth/index";
 import chatRouter from "./routes/features/chatbot";
+import crop_pred_router from "./routes/features/crop_yield_pred";
 
 const app= express();
 
@@ -19,7 +20,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRouter);
 
-app.use("/api/chat", chatRouter)
+app.use("/api/chat", chatRouter);
+app.use("/api/crop_pred_predictor", crop_pred_router);
 
 app.get("/health", (req,res)=>{
     res.json({status: "ok", message:"AgriSense API running"});
@@ -39,6 +41,7 @@ app.get("/health", (req,res)=>{
 //GET  http://localhost:3000/api/auth/verify-email/verify?token=xxx
 
 //post http://localhost:3000/api/chat/message
+//post http://localhost:3000/api/chat/crop_pred_predictor
 
 
 
