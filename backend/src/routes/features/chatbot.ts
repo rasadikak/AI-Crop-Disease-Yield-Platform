@@ -11,6 +11,7 @@ chatRouter.post("/message",authMiddleware,async(req:AuthRequest, res:Response)=>
     const farmerId = req.farmerId;
 
     if (!message){
+        
         res.status(400).json({error:"Message is required"});
         return;
     }

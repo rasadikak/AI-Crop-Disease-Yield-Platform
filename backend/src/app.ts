@@ -41,7 +41,7 @@ app.get("/health", (req,res)=>{
 //GET  http://localhost:3000/api/auth/verify-email/verify?token=xxx
 
 //post http://localhost:3000/api/chat/message
-//post http://localhost:3000/api/chat/crop_pred_predictor
+//post http://localhost:3000/api/crop_pred_predictor
 
 
 
