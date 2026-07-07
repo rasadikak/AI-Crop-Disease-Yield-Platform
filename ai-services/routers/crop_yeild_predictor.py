@@ -40,11 +40,13 @@ def crop_yield_predictor(request: YieldRequest) -> dict:
     lower = np.percentile(tree_predictions, 5)
     upper = np.percentile(tree_predictions, 95)
 
-    return {
+    res= {
         "predicted_yield_kg_per_ha": round(float(prediction), 2),
         "confidence_low":            round(float(lower), 2),
         "confidence_high":           round(float(upper), 2)
     }
+
+    return res
 
 #['Cassava', 'Maize', 'Plantains and others', 'Potatoes', 'Rice, paddy', 'Sorghum', 'Soybeans', 'Sweet potatoes']
 

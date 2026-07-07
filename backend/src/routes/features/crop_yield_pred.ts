@@ -1,5 +1,6 @@
 import {Router, Response} from "express";
 import authMiddleware, {AuthRequest} from "../../middleware/auth";
+import axios from "axios";
 
 const crop_pred_router= Router();
 
@@ -15,7 +16,13 @@ crop_pred_router.post("/", authMiddleware,async(req:AuthRequest, res:Response)=>
 
     try{
 
-        
+        const ai_response=await axios.post(`${process.env.FASTAPI_URL}/crop_yield_pred/`,{
+            crop, year, temp, pesticides
+        });
+
+        const pred= ai_response.data.res;
+
+        res.json({pred});
 
     }catch(error:any){
         console.error("crop yield pred  error", error);
