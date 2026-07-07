@@ -17,7 +17,7 @@ export const createToken= async(farmerId:number):Promise<string> =>{
     try{
     const token= jwt.sign({farmerId},
         process.env.JWT_SECRET as string,
-        { expiresIn: "7d" }  
+        { expiresIn: "30m" }  
     );
     return token;
     }catch(error){
