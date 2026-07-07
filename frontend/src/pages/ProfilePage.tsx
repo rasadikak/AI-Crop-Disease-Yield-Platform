@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import useAuth from "../hooks/useAuth";
+import api from "../services/api"
 
 const ProfilePage = () => {
     const { farmer } = useAuth();
@@ -17,7 +18,29 @@ const ProfilePage = () => {
         "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya"
         ];
 
-    
+    //name editing
+    const [isNameEditing, setIsNameEditing] = useState(false);
+    const [draftName, setDraftName] = useState(name);
+
+    const handleNameEditClick = () => {
+        setDraftName(name); 
+        setIsNameEditing(true);
+    };
+
+    const handleNameSave = () => {
+        if (!draftName.trim()) return;
+        setName(draftName.trim());
+        setIsNameEditing(false);
+        
+        await api.put("/auth/profile/update-name", { name: draftName.trim() });
+    };
+
+    const handleNameEditCancel = () => {
+        setDraftName(name); 
+        setIsNameEditing(false);
+    };
+
+
 
 
     return (
@@ -26,14 +49,36 @@ const ProfilePage = () => {
 
         <h3>Mange your account and preferences </h3>
 
-        your name
-        <input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
-        <button>Edit name</button>
+        <div>
+            <label>name</label>
+            
+            {isNameEditing ? (
+                <>
+                    <input
+                        type="text"
+                        name="name"
+                        value={draftName}
+                        onChange={(e) => setDraftName(e.target.value)}
+                        autoFocus
+                    />
+                    <button onClick={handleNameSave}>Save</button>
+                    <button onClick={handleNameEditCancel}>Cancel</button>
+                </>
+            ) : (
+                <>
+                    <span>{name}</span>
+                    <button onClick={handleNameEditClick}>Edit name</button>
+                </>
+            )}
+        </div>
+
+
 
         <br></br>
-
-        email_address
-        <input type="text" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <div>
+            <label>email_address</label>
+            <input type="text" name="email" value={email} />
+        </div>
 
         <br></br>
 

@@ -37,6 +37,12 @@ app.get("/health", (req,res)=>{
 //GET  http://localhost:3000/api/auth/forgot-password/reset-link?token=xxx
 //POST http://localhost:3000/api/auth/forgot-password/reset
 
+//get http://localhost:3000/api/auth/profile/get-farmer-info
+//put http://localhost:3000/api/auth/profile/update-name
+//put http://localhost:3000/api/auth/profile/update-district
+//delete http://localhost:3000/api/auth/profile/delete-account
+
+
 //POST http://localhost:3000/api/auth/verify-email/request_verify_link
 //GET  http://localhost:3000/api/auth/verify-email/verify?token=xxx
 
