@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from chatbot.services.API_call import get_chat_response
 
-router = APIRouter(prefix="/chat", tags=["chatbot"])
+router = APIRouter(prefix="/chat", tags=["chat"])
 
 
 class ChatMessage(BaseModel):
