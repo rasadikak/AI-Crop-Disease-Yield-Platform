@@ -54,7 +54,7 @@ const CropYieldPredictorPage=()=>{
 
         try{
 
-            const res= await api.post("/crop_pred_predictor",{
+            const res= await api.post("/crop_yield_predictor",{
                 crop:crop,
                 year:yearNum,
                 temp:tempNum,
@@ -129,10 +129,11 @@ const CropYieldPredictorPage=()=>{
             {error && <p style={{ color: "red" }}>{error}</p>}
 
             {result && (
-                <div className="result">
-                    Predicted yield: {result.pred}
-
-                </div>
+            <div>
+                <h3>Prediction Result</h3>
+                <p>Predicted yield: <strong>{result.predicted_yield_kg_per_ha} kg/ha</strong></p>
+                <p>Confidence range: {result.confidence_low} — {result.confidence_high} kg/ha</p>
+            </div>
             )}
             
         </div>
