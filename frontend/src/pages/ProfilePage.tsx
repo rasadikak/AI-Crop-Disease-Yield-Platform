@@ -5,10 +5,12 @@ import useAuth from "../hooks/useAuth";
 import api from "../services/api"
 import { useNavigate } from "react-router-dom";
 
-const navigate = useNavigate();
+
 
 
 const ProfilePage = () => {
+
+    const navigate = useNavigate();
     const { farmer } = useAuth();
     const [name, setName] = useState(farmer?.name ?? "");
     const [email, setEmail] = useState(farmer?.email ?? "");
