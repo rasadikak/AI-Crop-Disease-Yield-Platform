@@ -21,9 +21,9 @@ crop_pred_router.post("/", authMiddleware,async(req:AuthRequest, res:Response)=>
             crop, year, temp, pesticides
         });
 
-        const pred= ai_response.data;
+        
 
-        res.json({pred});
+        res.json(ai_response.data);
 
     }catch(error:any){
 
