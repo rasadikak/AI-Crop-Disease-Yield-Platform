@@ -1,4 +1,4 @@
-// ─── ResetPasswordPage.tsx ───────────────────────────────────────────────────
+
 import { useState } from "react";
 import { resetPassword } from "../../services/authService";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
