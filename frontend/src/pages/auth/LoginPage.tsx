@@ -1,4 +1,4 @@
-// ─── LoginPage.tsx ───────────────────────────────────────────────────────────
+
 import { useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { login } from "../../services/authService";
