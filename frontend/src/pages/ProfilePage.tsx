@@ -29,7 +29,7 @@ const ProfilePage = () => {
   const [nameError, setNameError]                 = useState("");
   const [districtSuccess, setDistrictSuccess]     = useState(false);
 
-  // ── name ──────────────────────────────────────────────
+  //  name 
   const handleNameSave = async () => {
     if (!draftName.trim()) { setNameError("Name cannot be empty"); return; }
     try {
@@ -42,7 +42,7 @@ const ProfilePage = () => {
     }
   };
 
-  // ── district ───────────────────────────────────────────
+  //  district 
   const handleDistrictSave = async () => {
     if (!draftDistrict) return;
     try {
@@ -56,7 +56,7 @@ const ProfilePage = () => {
     }
   };
 
-  // ── delete ─────────────────────────────────────────────
+  //  delete 
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
     setDeleteError("");
