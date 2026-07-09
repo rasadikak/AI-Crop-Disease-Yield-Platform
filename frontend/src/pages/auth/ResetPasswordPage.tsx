@@ -1,103 +1,119 @@
-import {useState} from "react";
-import {resetPassword} from "../../services/authService"
-import { useNavigate, Link,  useSearchParams } from "react-router-dom";
+// ─── ResetPasswordPage.tsx ───────────────────────────────────────────────────
+import { useState } from "react";
+import { resetPassword } from "../../services/authService";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 
-const ResetPasswordPage =()=>{
-
-    
-    const [password, setPassword]= useState("");
-    const [Confirmpassword, setConfirmPassword]= useState("");
-    
-
-    const [isLoading, setIsLoading]= useState(false);
-    const [error, setError]= useState("");
-
-    const [searchParams] = useSearchParams();
-    const token = searchParams.get("token");
-
-    
-    const navigate = useNavigate();
-
-    const handleSubmit= async(e:React.FormEvent)=>{
-        e.preventDefault();
-
-        if( !password || !Confirmpassword ){
-            setError("All fields are required");
-            return;
-        }
-
-        if (password!=Confirmpassword){
-                setError("passwords are not match");
-                return;
-        }
-
-        if (password.length < 6) {
-            setError("Password must be at least 6 characters");
-            return;
-        }
-
-        
-
-        if (!token){
-            setError("invalid token or missing reset token ");
-            return;
-        
-
-        }
-        setIsLoading(true);
-        setError("");
-
-        try{
-
-            await resetPassword(token, password, Confirmpassword);
-            navigate("/login?success=password_updated");
-
-        }
-        catch(error:any){
-            setError(error.response?.data?.error || "password update failed");
-        }finally{
-            setIsLoading(false);
-        }
-
-    }
-
-    return(
-        <div>
-            <h2> reset password Page</h2>
-
-            
-
-            {error && <p style={{ color: "red" }}>{error}</p>}
-
-            <form onSubmit={handleSubmit}>
-
-                
-
-                <div>
-                    <label>password</label>
-                    <input type="password" value={password} placeholder="" onChange={(e)=>{setPassword(e.target.value)}}/>
-                </div>
-
-                <div>
-                    <label>confirm password</label>
-                    <input type="password" value={Confirmpassword} placeholder="" onChange={(e)=>{setConfirmPassword(e.target.value)}}/>
-                </div>
-
-                
-
-                <button type="submit" disabled={isLoading}>
-                    {isLoading ? "saving" : "save"}
-                </button>
-
-            </form>
-            <p>
-                log in <Link to="/login">Log in</Link>
-            </p>
-            
-
-        </div>
-    );
-    
+const validatePassword = (password: string): string | null => {
+  if (password.length < 8) return "Password must be at least 8 characters";
+  if (!/[A-Z]/.test(password)) return "Must contain an uppercase letter";
+  if (!/[a-z]/.test(password)) return "Must contain a lowercase letter";
+  if (!/[0-9]/.test(password)) return "Must contain a number";
+  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) return "Must contain a special character";
+  return null;
 };
 
-export default ResetPasswordPage ;
+const ResetPasswordPage = () => {
+  const [password, setPassword]             = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading]           = useState(false);
+  const [error, setError]                   = useState("");
+
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!token)                         { setError("Invalid or missing reset link"); return; }
+    if (!password || !confirmPassword)  { setError("All fields are required"); return; }
+    if (password !== confirmPassword)   { setError("Passwords do not match"); return; }
+    const pwError = validatePassword(password);
+    if (pwError)                        { setError(pwError); return; }
+
+    setIsLoading(true);
+    setError("");
+    try {
+      await resetPassword(token, password, confirmPassword);
+      navigate("/login?success=password_updated");
+    } catch (err: any) {
+      setError(err.response?.data?.error || "Password reset failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (!token) return (
+    <div className="min-h-screen bg-cover bg-center flex items-center justify-center"
+      style={{ backgroundImage: "url('/images/leaves-bg.jpg')" }}>
+      <div className="absolute inset-0 bg-black/50" />
+      <div className="relative z-10 bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-8 text-center">
+        <div className="text-4xl mb-4">⚠️</div>
+        <h2 className="text-lg font-semibold text-gray-800 mb-2">Invalid link</h2>
+        <p className="text-sm text-gray-500 mb-4">This password reset link is invalid or has expired.</p>
+        <Link to="/forgot-password" className="text-green-700 text-sm font-medium hover:underline">
+          Request a new link
+        </Link>
+      </div>
+    </div>
+  );
+
+  return (
+    <div
+      className="min-h-screen bg-cover bg-center flex items-center justify-center"
+      style={{ backgroundImage: "url('/images/leaves-bg.jpg')" }}
+    >
+      <div className="absolute inset-0 bg-black/50" />
+      <div className="relative z-10 bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-8">
+        <div className="text-center mb-6">
+          <div className="text-4xl mb-2">🌿</div>
+          <h1 className="text-2xl font-bold text-green-800">AgriSense</h1>
+          <p className="text-gray-500 text-sm mt-1">Set your new password</p>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 mb-4">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">New password</label>
+            <input
+              type="password"
+              value={password}
+              placeholder="Min 8 chars, uppercase, number, symbol"
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm new password</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              placeholder="Re-enter your new password"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-green-700 hover:bg-green-800 disabled:bg-green-400 text-white font-semibold py-2.5 rounded-lg transition-colors text-sm"
+          >
+            {isLoading ? "Saving..." : "Save New Password"}
+          </button>
+        </form>
+
+        <div className="text-center mt-4">
+          <Link to="/login" className="text-green-700 text-sm font-medium hover:underline">
+            Back to Sign In
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ResetPasswordPage;
