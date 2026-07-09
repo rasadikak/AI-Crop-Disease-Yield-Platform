@@ -1,4 +1,4 @@
-// ─── VerifyEmailPage.tsx ─────────────────────────────────────────────────────
+
 import { useState } from "react";
 import { sendVerificationEmail } from "../../services/authService";
 import { Link, useLocation } from "react-router-dom";
