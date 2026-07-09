@@ -186,6 +186,7 @@ const SignupPage = () => {
             Log in
           </Link>
         </p>
+        
 
       </div>
     </div>
