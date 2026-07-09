@@ -10,6 +10,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError]       = useState("");
   const [showVerifyLink, setShowVerifyLink] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -95,12 +96,20 @@ const LoginPage = () => {
               </Link>
             </div>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               placeholder="Enter your password"
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
+
+            <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+                {showPassword ? "🙈" : "👁️"}
+            </button>
           </div>
 
           <button

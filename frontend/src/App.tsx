@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 
+import Navbar from "./components/layout/Navbar";
 
 import ProtectedRoute from "./components/layout/ProtectedRoute";
 
@@ -27,6 +28,7 @@ const App=()=>{
     <AuthProvider>
 
       <BrowserRouter>
+      <Navbar /> 
           <Routes>
             <Route path="/" element={<HomePage/>}/>
             <Route path="/login"          element={<LoginPage />} />
@@ -44,13 +46,13 @@ const App=()=>{
             <Route path="/chatbot" element={
             <ProtectedRoute><ChatbotPage /></ProtectedRoute>} />
 
-            <Route path="/CropYeildPredictor" element={
+            <Route path="/yield" element={
             <ProtectedRoute><CropYeildPredictorPage /></ProtectedRoute>} />
 
-            <Route path="/PlantDiseaseClassifier" element={
+            <Route path="/scan" element={
             <ProtectedRoute><PlantDiseaseClassifierPage /></ProtectedRoute>} />
 
-            <Route path="/WeatherAnomalyDetector" element={
+            <Route path="/weather" element={
             <ProtectedRoute><WeatherAnomalyDetectorPage /></ProtectedRoute>} />
 
 

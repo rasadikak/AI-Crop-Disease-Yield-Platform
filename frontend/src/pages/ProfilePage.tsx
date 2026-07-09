@@ -75,17 +75,7 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen bg-amber-50">
 
-      {/* top bar */}
-      <div className="bg-green-800 text-white px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">🌿</span>
-          <span className="font-bold text-lg">AgriSense</span>
-        </div>
-        <Link to="/dashboard" className="text-green-200 hover:text-white text-sm">
-          ← Back to Dashboard
-        </Link>
-      </div>
-
+      
       <div className="max-w-xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-green-900 mb-1">Your Profile</h1>
         <p className="text-gray-500 text-sm mb-6">Manage your account and preferences</p>
