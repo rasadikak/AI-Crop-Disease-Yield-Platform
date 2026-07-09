@@ -1,4 +1,4 @@
-// ─── ForgotPasswordPage.tsx ──────────────────────────────────────────────────
+
 import { useState } from "react";
 import { forgotPassword } from "../../services/authService";
 import { Link } from "react-router-dom";
