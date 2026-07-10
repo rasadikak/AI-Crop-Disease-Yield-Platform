@@ -11,7 +11,7 @@ const Navbar = () => {
   
 
 // list of paths where navbar should NOT appear
-  const hideOnPaths = ["/login", "/signup", "/forgot-password", "/reset-password", "/verify-email"];
+  const hideOnPaths = ["/","/login", "/signup", "/forgot-password", "/reset-password", "/verify-email"];
 
 // return nothing if we're on an auth page
   if (hideOnPaths.includes(location.pathname)) return null;
