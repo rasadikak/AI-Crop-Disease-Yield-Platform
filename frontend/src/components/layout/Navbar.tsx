@@ -46,7 +46,7 @@ const Navbar = () => {
               <Link to="/scan"       className={isActive("/scan")}>Disease Scan</Link>
               <Link to="/yield"      className={isActive("/yield")}>Yield Predictor</Link>
               <Link to="/weather"    className={isActive("/weather")}>Weather</Link>
-              <Link to="/chatbot"    className={isActive("/chatbot")}>AI Chat</Link>
+              <Link to="/dashboard"    className={isActive("/dashboard")}>AI Chat</Link>
 
               {/* profile dropdown */}
               <div className="relative">

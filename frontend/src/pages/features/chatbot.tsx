@@ -13,7 +13,7 @@ const ChatbotPage=()=>{
     const [messages, setMessages]   = useState<Message[]>([]);
     const [input, setInput]         = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [isOpen, setIsOpen]       = useState(false);
+   
     const [error, setError]         = useState("");
 
     //used for auto-scroll
@@ -63,22 +63,14 @@ const ChatbotPage=()=>{
         }
     };
 
-    // if widget is closed, show just the toggle button
-    if (!isOpen) {
-        return (
-        <div>
-            <button onClick={() => setIsOpen(true)}>
-            Chat with AgriSense AI
-            </button>
-        </div>
-        )}
+    
 
     return (
     <div>
       {/* header */}
       <div>
         <h3>AgriSense Assistant</h3>
-        <button onClick={() => setIsOpen(false)}>Close</button>
+        
       </div>
 
       {/* message list */}
