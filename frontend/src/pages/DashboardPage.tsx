@@ -8,13 +8,7 @@ const DashboardPage = () => {
             <div style={{ flex: 1 }}>
                 <h2>dashboard</h2>
                 
-                <Link to="/profile">profile</Link>
-                <br />
-                <Link to="/CropYeildPredictor">Crop Yeild Predictor</Link>
-                <br />
-                <Link to="/PlantDiseaseClassifier">Plant Disease Classifier</Link>
-                <br />
-                <Link to="/WeatherAnomalyDetector">Weather Anomaly Detector</Link>
+                
             </div>
 
             {/* chatbot floating on the right */}
