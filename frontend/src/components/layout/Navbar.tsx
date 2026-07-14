@@ -33,7 +33,7 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
         {/* logo */}
-        <Link to={token ? "/dashboard" : "/"} className="flex items-center gap-2">
+        <Link to={token ? "/" : "/"} className="flex items-center gap-2">
           <span className="text-2xl">🌿</span>
           <span className="text-white font-bold text-lg tracking-tight">AgriSense</span>
         </Link>

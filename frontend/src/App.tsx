@@ -18,7 +18,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 
 import ChatbotPage from "./pages/features/chatbot";
-import CropYeildPredictorPage from "./pages/features/crop_yeild_predictor";
+import CropYieldPredictorPage from "./pages/features/crop_yeild_predictor";
 import PlantDiseaseClassifierPage from "./pages/features/plant_disease_classifer";
 import WeatherAnomalyDetectorPage from "./pages/features/weather_anomaly_detector";
 
@@ -47,7 +47,7 @@ const App=()=>{
             <ProtectedRoute><ChatbotPage /></ProtectedRoute>} />
 
             <Route path="/yield" element={
-            <ProtectedRoute><CropYeildPredictorPage /></ProtectedRoute>} />
+            <ProtectedRoute><CropYieldPredictorPage /></ProtectedRoute>} />
 
             <Route path="/scan" element={
             <ProtectedRoute><PlantDiseaseClassifierPage /></ProtectedRoute>} />

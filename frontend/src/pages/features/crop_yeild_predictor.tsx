@@ -6,7 +6,7 @@ const CROPS = [
   "Rice, paddy", "Sorghum", "Soybeans", "Sweet potatoes"
 ];
 
-// ── confidence bar component ──────────────────────────────────────────────────
+
 const ConfidenceBar = ({
   value, low, high
 }: { value: number; low: number; high: number }) => {
@@ -101,11 +101,14 @@ const CropYieldPredictorPage = () => {
 
     setIsLoading(true);
     try {
-      const res = await api.post("/crop-yield/", {
+      console.log("hiiii");
+      const res = await api.post("/crop_yield_predictor/", {
         crop, year: yearNum, temp: tempNum, pesticides: pesticidesNum
       });
+      console.log(res);
       setResult(res.data);
     } catch (err: any) {
+      console.log("errrrrrrr",err)
       setError(err.response?.data?.error || "Prediction failed — please try again");
     } finally {
       setIsLoading(false);

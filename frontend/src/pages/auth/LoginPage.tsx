@@ -28,6 +28,7 @@ const LoginPage = () => {
       loginUser(response);
       navigate("/dashboard");
     } catch (err: any) {
+      console.log("FULL ERROR OBJECT:", JSON.stringify(err.response?.data, null, 2));
       setError(err.response?.data?.error || "Login failed");
       if (err.response?.status === 403) setShowVerifyLink(true);
     } finally {

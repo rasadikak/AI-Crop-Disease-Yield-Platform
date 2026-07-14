@@ -9,7 +9,7 @@ import treatment_recommend_router from "./routes/features/treatment_recommender"
 const app= express();
 
 app.use(cors({
-    origin:"https://localhost:5173",  //react dev server
+    origin:["http://localhost:5173", "https://localhost:5173"],  // react dev server
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
