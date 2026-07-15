@@ -1,4 +1,4 @@
-// ─── WeatherWidget.tsx ────────────────────────────────────────────────────────
+
 import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 
@@ -53,14 +53,14 @@ interface WeatherData {
 }
 
 const WeatherWidget = () => {
-  // get district directly from AuthContext — no props needed
+ 
   const { farmer } = useAuth();
 
   const [weather, setWeather]     = useState<WeatherData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError]         = useState("");
 
-  // use farmer's district, fall back to Colombo if not set
+  
   const district = farmer?.district || "Colombo";
   const coords   = DISTRICT_COORDS[district] ?? DISTRICT_COORDS["Colombo"];
 
@@ -98,7 +98,7 @@ const WeatherWidget = () => {
     fetchWeather();
   }, [coords.lat, coords.lon]); // refetches if district changes
 
-  // ── loading skeleton ──
+  
   if (isLoading) return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 animate-pulse">
       <div className="h-3 bg-gray-100 rounded w-1/3 mb-3" />
