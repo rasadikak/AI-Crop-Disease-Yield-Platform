@@ -48,9 +48,9 @@ const ResetPasswordPage = () => {
   if (!token) return (
     <div
       className="min-h-screen bg-cover bg-center flex items-center justify-center"
-      style={{ backgroundImage: "url('/images/leaves-bg.jpg')" }}
+      style={{ backgroundImage: "url('/images/resetPasswordPage.webp')" }}
     >
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-white/15" />
       <div className="relative z-10 bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-8 text-center">
         <div className="text-4xl mb-4">⚠️</div>
         <h2 className="text-lg font-semibold text-gray-800 mb-2">Invalid link</h2>

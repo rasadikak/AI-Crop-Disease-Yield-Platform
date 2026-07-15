@@ -73,12 +73,15 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div
+      className="min-h-screen bg-cover bg-center relative"
+      style={{ backgroundImage: "url('/images/profilePage.webp')" }}
+    >
+      <div className="absolute inset-0 bg-white/15" />
 
-      
-      <div className="max-w-xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-green-900 mb-1">Your Profile</h1>
-        <p className="text-gray-500 text-sm mb-6">Manage your account and preferences</p>
+      <div className="relative z-10 max-w-xl mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold text-white mb-1">Your Profile</h1>
+        <p className="text-gray-200 text-sm mb-6">Manage your account and preferences</p>
 
         {/* card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 divide-y divide-gray-100">

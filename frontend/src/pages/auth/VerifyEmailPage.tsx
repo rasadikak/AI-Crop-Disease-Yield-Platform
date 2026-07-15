@@ -28,9 +28,9 @@ const VerifyEmailPage = () => {
   const wrapper = (children: React.ReactNode) => (
     <div
       className="min-h-screen bg-cover bg-center flex items-center justify-center"
-      style={{ backgroundImage: "url('/images/leaves-bg.jpg')" }}
+      style={{ backgroundImage: "url('/images/verifyEmailPage.webp')" }}
     >
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-white/15" />
       <div className="relative z-10 bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-8">
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">🌿</div>

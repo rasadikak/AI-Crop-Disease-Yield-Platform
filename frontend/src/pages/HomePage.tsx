@@ -30,9 +30,9 @@ const HomePage = () => {
       {/* hero section */}
       <div
         className="relative min-h-screen bg-cover bg-center flex items-center"
-        style={{ backgroundImage: "url('/images/hero-farm.jpg')" }}
+        style={{ backgroundImage: "url('/images/cropYieldPredPage.webp')" }}
       >
-        <div className="absolute inset-0 bg-black/55" />
+        <div className="absolute inset-0 bg-black/50" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-white">
           <div className="text-5xl mb-4">🌿</div>
@@ -69,9 +69,11 @@ const HomePage = () => {
       {/* features section */}
       <div
         className="relative py-20 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/rice-field.jpg')" }}
+        style={{ backgroundImage: "url('/images/homePage2.webp')" 
+            
+        }}
       >
-        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-3">What AgriSense Can Do</h2>
@@ -97,10 +99,10 @@ const HomePage = () => {
 
       {/* CTA section */}
       <div
-        className="relative py-20 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/soil-texture.jpg')" }}
+        className="relative py-30 bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/homePage3.webp')" }}
       >
-        <div className="absolute inset-0 bg-green-900/80" />
+        <div className="absolute inset-0 bg-green-900/50" />
         <div className="relative z-10 text-center px-6">
           <h2 className="text-3xl font-bold text-white mb-3">
             Ready to farm smarter?
