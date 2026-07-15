@@ -33,7 +33,7 @@ const ProfilePage = () => {
   const handleNameSave = async () => {
     if (!draftName.trim()) { setNameError("Name cannot be empty"); return; }
     try {
-      await api.put("/profile/update-name", { name: draftName.trim() });
+      await api.put("/auth/profile/update-name", { new_name: draftName.trim() });
       setName(draftName.trim());
       setIsNameEditing(false);
       setNameError("");
@@ -46,7 +46,7 @@ const ProfilePage = () => {
   const handleDistrictSave = async () => {
     if (!draftDistrict) return;
     try {
-      await api.put("/profile/update-district", { district: draftDistrict });
+      await api.put("/auth/profile/update-district", { new_district: draftDistrict });
       setDistrict(draftDistrict);
       setIsDistrictEditing(false);
       setDistrictSuccess(true);
@@ -61,7 +61,7 @@ const ProfilePage = () => {
     setIsDeleting(true);
     setDeleteError("");
     try {
-      await api.delete("/profile");
+      await api.delete("/auth/profile/delete-account");
       logoutUser();
       navigate("/login");
     } catch (err: any) {

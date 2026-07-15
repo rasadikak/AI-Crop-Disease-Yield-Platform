@@ -11,7 +11,8 @@ const profileRouter= Router();
 //change name
 profileRouter.put("/update-name", authMiddleware,async(req:AuthRequest, res:Response)=>{
     try{
-        const {new_name}= req.body;
+        const rawName = req.body.new_name ?? req.body.name;
+        const new_name = typeof rawName === "string" ? rawName.trim() : "";
         const userId= req.farmerId;
         
         if (!userId){
@@ -19,7 +20,7 @@ profileRouter.put("/update-name", authMiddleware,async(req:AuthRequest, res:Resp
             return;
         };
 
-        if (!new_name || typeof new_name !== "string" || !new_name.trim()) {
+        if (!new_name) {
             res.status(400).json({ error: "Name is required" });
             return;
         }
@@ -54,7 +55,8 @@ profileRouter.put("/update-name", authMiddleware,async(req:AuthRequest, res:Resp
 //change district
 profileRouter.put("/update-district",authMiddleware, async(req:AuthRequest, res:Response)=>{
     try{
-        const {new_district}= req.body;
+        const rawDistrict = req.body.new_district ?? req.body.district;
+        const new_district = typeof rawDistrict === "string" ? rawDistrict.trim() : "";
         const userId= req.farmerId;
         
         if (!userId){

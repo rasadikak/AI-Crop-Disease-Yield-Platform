@@ -29,7 +29,7 @@ const LoginPage = () => {
       navigate("/dashboard");
     } catch (err: any) {
       console.log("FULL ERROR OBJECT:", JSON.stringify(err.response?.data, null, 2));
-      setError(err.response?.data?.error || "Login failed");
+      setError(err.response?.data?.error || "Network Error");
       if (err.response?.status === 403) setShowVerifyLink(true);
     } finally {
       setIsLoading(false);

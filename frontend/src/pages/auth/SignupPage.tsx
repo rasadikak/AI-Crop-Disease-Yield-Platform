@@ -39,7 +39,7 @@ const SignupPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password || !confirmPassword || !district) {
       setError("All fields are required"); return;
     }
     if (!validateEmail(email)) {
@@ -154,7 +154,7 @@ const SignupPage = () => {
           {/* district */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              District <span className="text-gray-400 font-normal">(optional)</span>
+              District 
             </label>
             <select
               value={district}
