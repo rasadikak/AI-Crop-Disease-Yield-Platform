@@ -1,7 +1,28 @@
 @import "tailwindcss";
 
 @layer base {
+  html {
+    overflow-x: hidden;
+  }
+
   body {
     font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* fluid base font size instead of fixed 16px everywhere */
+  html {
+    font-size: clamp(15px, 1.5vw + 10px, 16px);
+  }
+
+  /* prevent inputs/selects from ever overflowing their container on small screens */
+  input, select, textarea, button {
+    max-width: 100%;
+  }
+
+  /* images and background elements never force horizontal scroll */
+  img {
+    max-width: 100%;
+    height: auto;
   }
 }
