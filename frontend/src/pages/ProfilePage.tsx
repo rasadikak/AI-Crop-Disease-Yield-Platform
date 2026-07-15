@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import api from "../services/api";
 
@@ -16,8 +16,17 @@ const ProfilePage = () => {
   const { farmer, logoutUser } = useAuth();
 
   const [name, setName]       = useState(farmer?.name ?? "");
-  const [email]               = useState(farmer?.email ?? "");
+  const [email, setEmail]     = useState(farmer?.email ?? "");
   const [district, setDistrict] = useState(farmer?.district ?? "");
+
+  // keep local state in sync if `farmer` loads/updates after mount
+  useEffect(() => {
+    if (farmer) {
+      setName(farmer.name ?? "");
+      setEmail(farmer.email ?? "");
+      setDistrict(farmer.district ?? "");
+    }
+  }, [farmer]);
 
   const [isNameEditing, setIsNameEditing]         = useState(false);
   const [draftName, setDraftName]                 = useState(name);
@@ -27,24 +36,32 @@ const ProfilePage = () => {
   const [isDeleting, setIsDeleting]               = useState(false);
   const [deleteError, setDeleteError]             = useState("");
   const [nameError, setNameError]                 = useState("");
+  const [isSavingName, setIsSavingName]           = useState(false);
+  const [districtError, setDistrictError]         = useState("");
+  const [isSavingDistrict, setIsSavingDistrict]   = useState(false);
   const [districtSuccess, setDistrictSuccess]     = useState(false);
 
   //  name 
   const handleNameSave = async () => {
     if (!draftName.trim()) { setNameError("Name cannot be empty"); return; }
+    setIsSavingName(true);
+    setNameError("");
     try {
       await api.put("/auth/profile/update-name", { new_name: draftName.trim() });
       setName(draftName.trim());
       setIsNameEditing(false);
-      setNameError("");
     } catch (err: any) {
       setNameError(err.response?.data?.error || "Failed to update name");
+    } finally {
+      setIsSavingName(false);
     }
   };
 
   //  district 
   const handleDistrictSave = async () => {
     if (!draftDistrict) return;
+    setIsSavingDistrict(true);
+    setDistrictError("");
     try {
       await api.put("/auth/profile/update-district", { new_district: draftDistrict });
       setDistrict(draftDistrict);
@@ -52,7 +69,9 @@ const ProfilePage = () => {
       setDistrictSuccess(true);
       setTimeout(() => setDistrictSuccess(false), 3000);
     } catch (err: any) {
-      console.error("Failed to update district:", err);
+      setDistrictError(err.response?.data?.error || "Failed to update district");
+    } finally {
+      setIsSavingDistrict(false);
     }
   };
 
@@ -95,20 +114,23 @@ const ProfilePage = () => {
                   type="text"
                   value={draftName}
                   autoFocus
+                  disabled={isSavingName}
                   onChange={(e) => setDraftName(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50"
                 />
                 {nameError && <p className="text-red-600 text-xs">{nameError}</p>}
                 <div className="flex gap-2">
                   <button
                     onClick={handleNameSave}
-                    className="bg-green-700 hover:bg-green-800 text-white text-sm px-4 py-1.5 rounded-lg transition-colors"
+                    disabled={isSavingName}
+                    className="bg-green-700 hover:bg-green-800 disabled:bg-green-400 text-white text-sm px-4 py-1.5 rounded-lg transition-colors"
                   >
-                    Save
+                    {isSavingName ? "Saving..." : "Save"}
                   </button>
                   <button
                     onClick={() => { setIsNameEditing(false); setDraftName(name); setNameError(""); }}
-                    className="text-gray-500 hover:text-gray-700 text-sm px-4 py-1.5 rounded-lg border border-gray-200 transition-colors"
+                    disabled={isSavingName}
+                    className="text-gray-500 hover:text-gray-700 text-sm px-4 py-1.5 rounded-lg border border-gray-200 transition-colors disabled:opacity-50"
                   >
                     Cancel
                   </button>
@@ -146,24 +168,28 @@ const ProfilePage = () => {
               <div className="mt-2 space-y-2">
                 <select
                   value={draftDistrict}
+                  disabled={isSavingDistrict}
                   onChange={(e) => setDraftDistrict(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50"
                 >
                   <option value="">Select a district</option>
                   {SRI_LANKA_DISTRICTS.map((d) => (
                     <option key={d} value={d}>{d}</option>
                   ))}
                 </select>
+                {districtError && <p className="text-red-600 text-xs">{districtError}</p>}
                 <div className="flex gap-2">
                   <button
                     onClick={handleDistrictSave}
-                    className="bg-green-700 hover:bg-green-800 text-white text-sm px-4 py-1.5 rounded-lg transition-colors"
+                    disabled={isSavingDistrict}
+                    className="bg-green-700 hover:bg-green-800 disabled:bg-green-400 text-white text-sm px-4 py-1.5 rounded-lg transition-colors"
                   >
-                    Save
+                    {isSavingDistrict ? "Saving..." : "Save"}
                   </button>
                   <button
-                    onClick={() => { setIsDistrictEditing(false); setDraftDistrict(district); }}
-                    className="text-gray-500 hover:text-gray-700 text-sm px-4 py-1.5 rounded-lg border border-gray-200 transition-colors"
+                    onClick={() => { setIsDistrictEditing(false); setDraftDistrict(district); setDistrictError(""); }}
+                    disabled={isSavingDistrict}
+                    className="text-gray-500 hover:text-gray-700 text-sm px-4 py-1.5 rounded-lg border border-gray-200 transition-colors disabled:opacity-50"
                   >
                     Cancel
                   </button>
