@@ -21,14 +21,14 @@ const ConfidenceBar = ({
     : { label: "Lower confidence",  color: "bg-orange-400" };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
+    <div className="bg-white rounded-xl border border-gray-100 p-4 sm:p-6 shadow-sm">
 
       {/* main prediction */}
       <div className="text-center mb-6">
         <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">
           Predicted Yield
         </p>
-        <p className="text-4xl font-bold text-green-800">
+        <p className="text-3xl sm:text-4xl font-bold text-green-800">
           {value.toLocaleString()}
           <span className="text-lg font-normal text-gray-400 ml-1">kg/ha</span>
         </p>
@@ -129,14 +129,14 @@ const CropYieldPredictorPage = () => {
 
         {/* header */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white">Crop Yield Predictor</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Crop Yield Predictor</h1>
           <p className="text-gray-200 text-sm mt-1">
             Enter your crop details to get an estimated yield prediction
           </p>
         </div>
 
         {/* form card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 mb-6">
           <form onSubmit={handleSubmit} className="space-y-4">
 
             {/* crop */}
@@ -155,7 +155,7 @@ const CropYieldPredictorPage = () => {
             </div>
 
             {/* year + temp side by side */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={labelClass}>Year</label>
                 <input

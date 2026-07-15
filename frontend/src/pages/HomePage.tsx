@@ -34,13 +34,13 @@ const HomePage = () => {
       >
         <div className="absolute inset-0 bg-black/50" />
 
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-white">
-          <div className="text-5xl mb-4">🌿</div>
-          <h1 className="text-5xl font-bold leading-tight mb-4">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-white">
+          <div className="text-4xl sm:text-5xl mb-4">🌿</div>
+          <h1 className="text-3xl sm:text-5xl font-bold leading-tight mb-4">
             Smart Farming<br />
             <span className="text-green-400">Starts Here</span>
           </h1>
-          <p className="text-xl text-gray-200 mb-8 max-w-xl">
+          <p className="text-base sm:text-xl text-gray-200 mb-8 max-w-xl">
             AI-powered crop disease detection, yield prediction, and weather alerts — built for Sri Lankan farmers.
           </p>
           <div className="flex gap-4 flex-wrap">
@@ -68,15 +68,15 @@ const HomePage = () => {
 
       {/* features section */}
       <div
-        className="relative py-20 bg-cover bg-center"
+        className="relative py-14 sm:py-20 bg-cover bg-center"
         style={{ backgroundImage: "url('/images/homePage2.webp')" 
             
         }}
       >
         <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 max-w-5xl mx-auto px-6">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-3">What AgriSense Can Do</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">What AgriSense Can Do</h2>
             <p className="text-gray-300 text-sm max-w-xl mx-auto">
               Four AI-powered tools built specifically for Sri Lankan crops and growing conditions
             </p>
@@ -99,12 +99,12 @@ const HomePage = () => {
 
       {/* CTA section */}
       <div
-        className="relative py-30 bg-cover bg-center"
+        className="relative py-16 sm:py-30 bg-cover bg-center"
         style={{ backgroundImage: "url('/images/homePage3.webp')" }}
       >
         <div className="absolute inset-0 bg-green-900/50" />
-        <div className="relative z-10 text-center px-6">
-          <h2 className="text-3xl font-bold text-white mb-3">
+        <div className="relative z-10 text-center px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
             Ready to farm smarter?
           </h2>
           <p className="text-green-200 text-sm mb-8 max-w-md mx-auto">

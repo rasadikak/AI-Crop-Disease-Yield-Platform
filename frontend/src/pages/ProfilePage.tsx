@@ -98,15 +98,15 @@ const ProfilePage = () => {
     >
       <div className="absolute inset-0 bg-white/15" />
 
-      <div className="relative z-10 max-w-xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-white mb-1">Your Profile</h1>
+      <div className="relative z-10 max-w-xl mx-auto px-4 py-6 sm:py-8">
+        <h1 className="text-xl sm:text-2xl font-bold text-white mb-1">Your Profile</h1>
         <p className="text-gray-200 text-sm mb-6">Manage your account and preferences</p>
 
         {/* card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 divide-y divide-gray-100">
 
           {/* name row */}
-          <div className="px-6 py-5">
+          <div className="px-4 sm:px-6 py-5">
             <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Full Name</label>
             {isNameEditing ? (
               <div className="mt-2 space-y-2">
@@ -119,7 +119,7 @@ const ProfilePage = () => {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50"
                 />
                 {nameError && <p className="text-red-600 text-xs">{nameError}</p>}
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <button
                     onClick={handleNameSave}
                     disabled={isSavingName}
@@ -137,11 +137,11 @@ const ProfilePage = () => {
                 </div>
               </div>
             ) : (
-              <div className="mt-1 flex items-center justify-between">
-                <span className="text-gray-800 font-medium">{name}</span>
+              <div className="mt-1 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0 sm:justify-between">
+                <span className="text-gray-800 font-medium break-words">{name}</span>
                 <button
                   onClick={() => { setDraftName(name); setIsNameEditing(true); }}
-                  className="text-green-700 hover:text-green-800 text-sm font-medium"
+                  className="text-green-700 hover:text-green-800 text-sm font-medium self-start sm:self-auto"
                 >
                   Edit
                 </button>
@@ -150,16 +150,16 @@ const ProfilePage = () => {
           </div>
 
           {/* email row — read only */}
-          <div className="px-6 py-5">
+          <div className="px-4 sm:px-6 py-5">
             <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Email Address</label>
-            <div className="mt-1 flex items-center justify-between">
-              <span className="text-gray-800 font-medium">{email}</span>
-              <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">Read only</span>
+            <div className="mt-1 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0 sm:justify-between">
+              <span className="text-gray-800 font-medium break-all">{email}</span>
+              <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full self-start sm:self-auto">Read only</span>
             </div>
           </div>
 
           {/* district row */}
-          <div className="px-6 py-5">
+          <div className="px-4 sm:px-6 py-5">
             <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide">District</label>
             {districtSuccess && (
               <p className="text-green-600 text-xs mt-1">✓ District updated</p>
@@ -178,7 +178,7 @@ const ProfilePage = () => {
                   ))}
                 </select>
                 {districtError && <p className="text-red-600 text-xs">{districtError}</p>}
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <button
                     onClick={handleDistrictSave}
                     disabled={isSavingDistrict}
@@ -196,11 +196,11 @@ const ProfilePage = () => {
                 </div>
               </div>
             ) : (
-              <div className="mt-1 flex items-center justify-between">
+              <div className="mt-1 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0 sm:justify-between">
                 <span className="text-gray-800 font-medium">{district || "Not set"}</span>
                 <button
                   onClick={() => { setDraftDistrict(district); setIsDistrictEditing(true); }}
-                  className="text-green-700 hover:text-green-800 text-sm font-medium"
+                  className="text-green-700 hover:text-green-800 text-sm font-medium self-start sm:self-auto"
                 >
                   Change
                 </button>
@@ -209,13 +209,13 @@ const ProfilePage = () => {
           </div>
 
           {/* password row */}
-          <div className="px-6 py-5">
+          <div className="px-4 sm:px-6 py-5">
             <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Password</label>
-            <div className="mt-1 flex items-center justify-between">
+            <div className="mt-1 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0 sm:justify-between">
               <span className="text-gray-400 text-sm">••••••••</span>
               <Link
                 to="/forgot-password"
-                className="text-green-700 hover:text-green-800 text-sm font-medium"
+                className="text-green-700 hover:text-green-800 text-sm font-medium self-start sm:self-auto"
               >
                 Change password
               </Link>
@@ -225,15 +225,15 @@ const ProfilePage = () => {
         </div>
 
         {/* sign out */}
-        <div className="mt-4 bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-5">
-          <div className="flex items-center justify-between">
+        <div className="mt-4 bg-white rounded-2xl shadow-sm border border-gray-100 px-4 sm:px-6 py-5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:justify-between">
             <div>
               <p className="text-sm font-medium text-gray-800">Sign out</p>
               <p className="text-xs text-gray-400 mt-0.5">Sign out of your AgriSense account</p>
             </div>
             <button
               onClick={() => { logoutUser(); navigate("/login"); }}
-              className="text-gray-600 hover:text-gray-800 text-sm font-medium border border-gray-200 px-4 py-1.5 rounded-lg hover:bg-gray-50 transition-colors"
+              className="text-gray-600 hover:text-gray-800 text-sm font-medium border border-gray-200 px-4 py-1.5 rounded-lg hover:bg-gray-50 transition-colors self-start sm:self-auto"
             >
               Sign out
             </button>
@@ -241,15 +241,15 @@ const ProfilePage = () => {
         </div>
 
         {/* delete account */}
-        <div className="mt-4 bg-white rounded-2xl shadow-sm border border-red-100 px-6 py-5">
-          <div className="flex items-center justify-between">
+        <div className="mt-4 bg-white rounded-2xl shadow-sm border border-red-100 px-4 sm:px-6 py-5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:justify-between">
             <div>
               <p className="text-sm font-medium text-red-700">Delete account</p>
               <p className="text-xs text-gray-400 mt-0.5">Permanently delete your account and all data</p>
             </div>
             <button
               onClick={() => setShowDeleteConfirm(true)}
-              className="text-red-600 hover:text-red-700 text-sm font-medium border border-red-200 px-4 py-1.5 rounded-lg hover:bg-red-50 transition-colors"
+              className="text-red-600 hover:text-red-700 text-sm font-medium border border-red-200 px-4 py-1.5 rounded-lg hover:bg-red-50 transition-colors self-start sm:self-auto"
             >
               Delete
             </button>
@@ -263,7 +263,7 @@ const ProfilePage = () => {
                 This will permanently delete your account. This cannot be undone.
               </p>
               {deleteError && <p className="text-red-600 text-xs mb-2">{deleteError}</p>}
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <button
                   onClick={handleDeleteAccount}
                   disabled={isDeleting}
@@ -289,3 +289,5 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+
+//added mobile responsiveness

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { resetPassword } from "../../services/authService";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
@@ -51,7 +50,7 @@ const ResetPasswordPage = () => {
       style={{ backgroundImage: "url('/images/resetPasswordPage.webp')" }}
     >
       <div className="absolute inset-0 bg-white/15" />
-      <div className="relative z-10 bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-8 text-center">
+      <div className="relative z-10 bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-6 sm:p-8 text-center">
         <div className="text-4xl mb-4">⚠️</div>
         <h2 className="text-lg font-semibold text-gray-800 mb-2">Invalid link</h2>
         <p className="text-sm text-gray-500 mb-4">This reset link is invalid or has expired.</p>
@@ -68,7 +67,7 @@ const ResetPasswordPage = () => {
       style={{ backgroundImage: "url('/images/leaves-bg.jpg')" }}
     >
       <div className="absolute inset-0 bg-black/50" />
-      <div className="relative z-10 bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-8">
+      <div className="relative z-10 bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-6 sm:p-8">
 
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">🌿</div>

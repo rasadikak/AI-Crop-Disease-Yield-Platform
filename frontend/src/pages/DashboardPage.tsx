@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import ChatbotPage from "./features/chatbot";
@@ -27,13 +26,13 @@ const DashboardPage = () => {
 
       {/* hero banner */}
       <div
-        className="relative bg-cover bg-center py-10"
+        className="relative bg-cover bg-center py-8 sm:py-10"
         style={{ backgroundImage: "url('/images/rice-field.jpg')" }}
       >
         <div className="absolute inset-0 bg-green-900/70" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
           <p className="text-green-300 text-sm mb-1">{greeting()},</p>
-          <h1 className="text-3xl font-bold text-white mb-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">
             {farmer?.name ?? "Farmer"}
           </h1>
           {farmer?.district && (
@@ -43,17 +42,17 @@ const DashboardPage = () => {
       </div>
 
       {/* main layout */}
-      <div className="max-w-7xl mx-auto px-6 py-8 flex gap-6 items-start">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex flex-col lg:flex-row gap-6 items-start">
 
         {/* ── left column ── */}
-        <div className="flex-1 min-w-0 space-y-6">
+        <div className="flex-1 min-w-0 w-full space-y-6">
 
           {/* quick actions */}
           <div>
             <h2 className="text-base font-semibold text-green-900 mb-3">
               What would you like to do?
             </h2>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {QUICK_ACTIONS.map((action) => (
                 <Link
                   key={action.title}
@@ -86,7 +85,9 @@ const DashboardPage = () => {
         </div>
 
         {/* ── right column — chatbot ── */}
-        <div className="w-80 flex-shrink-0 sticky top-4" style={{ height: "calc(100vh - 120px)" }}>
+        <div
+          className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-4 h-[500px] lg:h-[calc(100vh-120px)]"
+        >
           <ChatbotPage />
         </div>
 
@@ -96,3 +97,5 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+
+////added mobile responsiveness

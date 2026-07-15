@@ -43,7 +43,7 @@ const LoginPage = () => {
     >
       <div className="absolute inset-0 bg-white/15" />
 
-      <div className="relative z-10 bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-8">
+      <div className="relative z-10 bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-6 sm:p-8">
 
         {/* header */}
         <div className="text-center mb-6">
