@@ -101,7 +101,7 @@ const CropYieldPredictorPage = () => {
 
     setIsLoading(true);
     try {
-      console.log("hiiii");
+      
       const res = await api.post("/crop_yield_predictor/", {
         crop, year: yearNum, temp: tempNum, pesticides: pesticidesNum
       });
