@@ -15,7 +15,8 @@ weather_anomaly_router.post("/",authMiddleware, async(req:AuthRequest, res:Respo
         const ai_response= axios.post(`${process.env.FASTAPI_URL}/weather_anomaly/`,{
             district
         });
-        res.json(ai_response);
+        res.json((await ai_response).data);
+        console.log(ai_response)
 
 
     }catch(error:any){
