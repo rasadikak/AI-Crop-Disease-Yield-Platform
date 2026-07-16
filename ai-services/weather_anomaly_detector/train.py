@@ -94,7 +94,7 @@ if __name__ == "__main__":
             joblib.dump(model, f"models/{dis_name}_anomaly.pkl")
 
             print(f"✓ Saved {dis_name}_anomaly.pkl")
-            time.sleep(3) 
+            time.sleep(60) 
 
         except Exception as e:
             print(f"✗ Skipped {dis_name} — {e}")
