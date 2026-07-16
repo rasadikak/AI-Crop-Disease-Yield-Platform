@@ -19,6 +19,8 @@ weather_anomaly_router.post("/",authMiddleware, async(req:AuthRequest, res:Respo
 
 
     }catch(error:any){
+        console.error("crop yield pred  error", error);
+        res.status(500).json({error:"Failed to process"});
 
     }
 
