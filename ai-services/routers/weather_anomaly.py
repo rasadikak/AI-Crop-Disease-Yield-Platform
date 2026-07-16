@@ -1,12 +1,12 @@
-from fastapi import APIRouter
-import httpx                          
+from fastapi import APIRouter, HTTPException
+import httpx
 from datetime import datetime, timedelta
 import pandas as pd
 import joblib
 from pathlib import Path
 from pydantic import BaseModel
 
-router= APIRouter(prefix='/weather_anomaly', tags=['weather_anomaly'])
+router = APIRouter(prefix='/weather_anomaly', tags=['weather_anomaly'])
 
 DISTRICTS = {
     "colombo":       {"lat": 6.9271,  "lon": 79.8612},
@@ -44,7 +44,6 @@ MONTH_NAMES = {
     9: "September",10: "October", 11: "November", 12: "December"
 }
 
-
 DISTRICT_NAME_MAP: dict[str, str] = {
     "Ampara":        "ampara",
     "Anuradhapura":  "anuradhapura",
@@ -65,7 +64,7 @@ DISTRICT_NAME_MAP: dict[str, str] = {
     "Matara":        "matara",
     "Monaragala":    "monaragala",
     "Mullaitivu":    "mullaitivu",
-    "Nuwara Eliya":  "nuwara_eliya",  
+    "Nuwara Eliya":  "nuwara_eliya",
     "Polonnaruwa":   "polonnaruwa",
     "Puttalam":      "puttalam",
     "Ratnapura":     "ratnapura",
@@ -74,141 +73,154 @@ DISTRICT_NAME_MAP: dict[str, str] = {
 }
 
 MODELS_DIR = Path(__file__).parent.parent / "weather_anomaly_detector" / "models"
-#print(MODELS_DIR)
+
 
 class anomaly_request(BaseModel):
-    district:str
+    district: str
 
 
 def normalize_district(district: str) -> str:
-    """Convert frontend district name to model file key."""
-   
+    if not district or not district.strip():
+        raise ValueError("District name cannot be empty")
+
     if district in DISTRICT_NAME_MAP:
         return DISTRICT_NAME_MAP[district]
-    
+
     lower = district.lower().replace(" ", "_")
     if lower in DISTRICTS:
         return lower
     raise ValueError(f"Unknown district: {district}")
 
+
 @router.post('/')
-async def predict_anomaly(request:anomaly_request) -> dict:
-    
+async def predict_anomaly(request: anomaly_request) -> dict:
+
     try:
-        district= request.district
+        district = request.district
         district_key = normalize_district(district)
     except ValueError as e:
-        return {"error": str(e), "is_anomaly": False}
+        raise HTTPException(status_code=400, detail=str(e))
 
-    
-    model_path   = MODELS_DIR / f"{district_key}_anomaly.pkl"
-    avg_path     = MODELS_DIR / f"{district_key}_historical_avg.pkl"
+    model_path = MODELS_DIR / f"{district_key}_anomaly.pkl"
+    avg_path = MODELS_DIR / f"{district_key}_historical_avg.pkl"
 
     if not model_path.exists() or not avg_path.exists():
-        return {
-            "district":   district,
-            "is_anomaly": False,
-            "error":      f"Model not trained yet for {district}. Run train.py first."
-        }
-
-    
-    end_date   = datetime.today()
-    start_date = end_date - timedelta(days=90)
-    coords     = DISTRICTS[district_key]
-
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            "https://archive-api.open-meteo.com/v1/archive",
-            params={
-                "latitude":   coords["lat"],
-                "longitude":  coords["lon"],
-                "start_date": start_date.strftime("%Y-%m-%d"),
-                "end_date":   end_date.strftime("%Y-%m-%d"),
-                "daily":      "temperature_2m_max,temperature_2m_min,precipitation_sum,relative_humidity_2m_max,relative_humidity_2m_min",
-                "timezone":   "Asia/Colombo"
-            },
-            timeout=30.0
+        raise HTTPException(
+            status_code=404,
+            detail=f"Model not trained yet for {district}. Run train.py first."
         )
 
-    data = response.json()
+    try:
+        model = joblib.load(model_path)
+        historical_avg = joblib.load(avg_path)
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to load model for {district}."
+        )
+
+    end_date = datetime.today()
+    start_date = end_date - timedelta(days=90)
+    coords = DISTRICTS[district_key]
+
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                "https://archive-api.open-meteo.com/v1/archive",
+                params={
+                    "latitude":   coords["lat"],
+                    "longitude":  coords["lon"],
+                    "start_date": start_date.strftime("%Y-%m-%d"),
+                    "end_date":   end_date.strftime("%Y-%m-%d"),
+                    "daily":      "temperature_2m_max,temperature_2m_min,precipitation_sum,relative_humidity_2m_max,relative_humidity_2m_min",
+                    "timezone":   "Asia/Colombo"
+                },
+                timeout=30.0
+            )
+            response.raise_for_status()
+    except httpx.TimeoutException:
+        raise HTTPException(status_code=504, detail="Weather data provider timed out.")
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=502, detail=f"Weather data provider returned an error ({e.response.status_code}).")
+    except httpx.RequestError:
+        raise HTTPException(status_code=502, detail="Could not reach weather data provider.")
+
+    try:
+        data = response.json()
+    except ValueError:
+        raise HTTPException(status_code=502, detail="Weather data provider returned an invalid response.")
 
     if "daily" not in data:
-        return {
-            "district":   district,
-            "is_anomaly": False,
-            "error":      "Weather data unavailable from Open-Meteo"
-        }
+        raise HTTPException(status_code=502, detail="Weather data unavailable from Open-Meteo")
 
-    
-    df          = pd.DataFrame(data["daily"])
-    df["time"]  = pd.to_datetime(df["time"])
-    df["year"]  = df["time"].dt.year
-    df["month"] = df["time"].dt.month
+    try:
+        df = pd.DataFrame(data["daily"])
+        df["time"] = pd.to_datetime(df["time"])
+        df["year"] = df["time"].dt.year
+        df["month"] = df["time"].dt.month
 
-    df_monthly = df.groupby(["year", "month"]).agg(
-        temp_max     = ("temperature_2m_max",       "mean"),
-        temp_min     = ("temperature_2m_min",       "mean"),
-        rainfall     = ("precipitation_sum",        "sum"),
-        humidity_max = ("relative_humidity_2m_max", "mean"),
-        humidity_min = ("relative_humidity_2m_min", "mean")
-    ).reset_index()
+        df_monthly = df.groupby(["year", "month"]).agg(
+            temp_max     = ("temperature_2m_max",       "mean"),
+            temp_min     = ("temperature_2m_min",       "mean"),
+            rainfall     = ("precipitation_sum",        "sum"),
+            humidity_max = ("relative_humidity_2m_max", "mean"),
+            humidity_min = ("relative_humidity_2m_min", "mean")
+        ).reset_index()
 
-    
-    model          = joblib.load(model_path)
-    historical_avg = joblib.load(avg_path)
+        if df_monthly.empty:
+            raise HTTPException(status_code=502, detail="No usable weather data returned for this period.")
+    except HTTPException:
+        raise
+    except KeyError:
+        raise HTTPException(status_code=502, detail="Weather data provider response was missing expected fields.")
+    except Exception:
+        raise HTTPException(status_code=500, detail="Failed to process weather data.")
 
-    
-    X           = df_monthly[FEATURE_COLS]
-    predictions = model.predict(X)  # 1 = normal, -1 = anomaly
+    try:
+        X = df_monthly[FEATURE_COLS]
+        predictions = model.predict(X)
+    except Exception:
+        raise HTTPException(status_code=500, detail="Anomaly model failed to run on the weather data.")
 
-    
     alerts = []
     for i, pred in enumerate(predictions):
         if pred == -1:
-            row        = df_monthly.iloc[i]
-            month_num  = int(row["month"])
-            year_num   = int(row["year"])
-            month_name = f"{MONTH_NAMES[month_num]} {year_num}"
-            hist       = historical_avg.loc[month_num]
+            try:
+                row = df_monthly.iloc[i]
+                month_num = int(row["month"])
+                year_num = int(row["year"])
+                month_name = f"{MONTH_NAMES[month_num]} {year_num}"
+                hist = historical_avg.loc[month_num]
 
-            
-            rainfall_diff = ((row["rainfall"] - hist["rainfall"]) / hist["rainfall"]) * 100 \
-                            if hist["rainfall"] > 0 else 0
-            temp_diff     = row["temp_max"] - hist["temp_max"]
+                rainfall_diff = ((row["rainfall"] - hist["rainfall"]) / hist["rainfall"]) * 100 \
+                    if hist["rainfall"] > 0 else 0
+                temp_diff = row["temp_max"] - hist["temp_max"]
 
-            if rainfall_diff < -40:
-                alert_type = "drought"
-                message    = f"Rainfall {abs(rainfall_diff):.0f}% below {MONTH_NAMES[month_num]} average in {district}"
-            elif rainfall_diff > 40:
-                alert_type = "flood_risk"
-                message    = f"Rainfall {rainfall_diff:.0f}% above {MONTH_NAMES[month_num]} average in {district}"
-            elif temp_diff > 3:
-                alert_type = "heat_spike"
-                message    = f"Temperature {temp_diff:.1f}°C above {MONTH_NAMES[month_num]} average in {district}"
-            elif temp_diff < -3:
-                alert_type = "cold_spell"
-                message    = f"Temperature {abs(temp_diff):.1f}°C below {MONTH_NAMES[month_num]} average in {district}"
-            else:
-                alert_type = "unusual_weather"
-                message    = f"Unusual weather pattern detected in {district} for {month_name}"
+                if rainfall_diff < -40:
+                    alert_type = "drought"
+                    message = f"Rainfall {abs(rainfall_diff):.0f}% below {MONTH_NAMES[month_num]} average in {district}"
+                elif rainfall_diff > 40:
+                    alert_type = "flood_risk"
+                    message = f"Rainfall {rainfall_diff:.0f}% above {MONTH_NAMES[month_num]} average in {district}"
+                elif temp_diff > 3:
+                    alert_type = "heat_spike"
+                    message = f"Temperature {temp_diff:.1f}\u00b0C above {MONTH_NAMES[month_num]} average in {district}"
+                elif temp_diff < -3:
+                    alert_type = "cold_spell"
+                    message = f"Temperature {abs(temp_diff):.1f}\u00b0C below {MONTH_NAMES[month_num]} average in {district}"
+                else:
+                    alert_type = "unusual_weather"
+                    message = f"Unusual weather pattern detected in {district} for {month_name}"
 
-            alerts.append({
-                "month":       month_name,
-                "type":        alert_type,
-                "message":     message,
-                "rainfall_mm": round(float(row["rainfall"]), 1),
-                "avg_temp":    round(float(row["temp_max"]), 1),
-            })
-
-    print({
-        "district":         district,
-        "is_anomaly":       len(alerts) > 0,
-        "alerts":           alerts,
-        "checked_months":   len(predictions),
-        "anomalous_months": len(alerts)
-    })
-
-    
+                alerts.append({
+                    "month":       month_name,
+                    "type":        alert_type,
+                    "message":     message,
+                    "rainfall_mm": round(float(row["rainfall"]), 1),
+                    "avg_temp":    round(float(row["temp_max"]), 1),
+                })
+            except Exception:
+                continue
 
     return {
         "district":         district,
