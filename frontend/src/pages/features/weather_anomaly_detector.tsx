@@ -54,6 +54,12 @@ const WeatherAnomalyDetectorPage=()=>{
     return (
         <div>
             <h2>WeatherAnomalyDetectorPage</h2>
+            <div>
+                {currentMonth}
+            </div>
+            <div>
+                {result}
+            </div>
         </div>
     )
 
