@@ -1,31 +1,34 @@
-import {Router, Request, Response} from "express";
-import authMiddleware, {AuthRequest} from "../../middleware/auth";
+import { Router, Request, Response } from "express";
+import authMiddleware, { AuthRequest } from "../../middleware/auth";
 import axios from "axios";
 
-const weather_anomaly_router= Router();
+const weather_anomaly_router = Router();
 
-weather_anomaly_router.post("/",authMiddleware, async(req:AuthRequest, res:Response)=>{
-    const {district}= req.body;
+weather_anomaly_router.post("/", authMiddleware, async (req: AuthRequest, res: Response) => {
+    const { district } = req.body;
 
-    if (!district){
-        res.status(400).json({error:"all field are required"});
+    if (!district) {
+        res.status(400).json({ error: "district is required" });
         return;
     }
-    try{
-        const ai_response= axios.post(`${process.env.FASTAPI_URL}/weather_anomaly/`,{
+
+    try {
+        const ai_response = await axios.post(`${process.env.FASTAPI_URL}/weather_anomaly/`, {
             district
         });
-        res.json((await ai_response).data);
-        console.log(ai_response)
+        res.json(ai_response.data);
 
+    } catch (error: any) {
+        if (axios.isAxiosError(error) && error.response) {
+            res.status(error.response.status).json({
+                error: error.response.data?.detail || "Failed to process weather anomaly request"
+            });
+            return;
+        }
 
-    }catch(error:any){
-        console.error("crop yield pred  error", error);
-        res.status(500).json({error:"Failed to process"});
-
+        console.error("weather anomaly error", error);
+        res.status(500).json({ error: "Failed to process" });
     }
-
 });
-
 
 export default weather_anomaly_router;
