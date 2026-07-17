@@ -1,0 +1,80 @@
+{
+  "completed_at": "2026-07-17T08:52:19.178575",
+  "results": {
+    "colombo": {
+      "status": "skipped"
+    },
+    "kandy": {
+      "status": "skipped"
+    },
+    "galle": {
+      "status": "skipped"
+    },
+    "jaffna": {
+      "status": "skipped"
+    },
+    "anuradhapura": {
+      "status": "skipped"
+    },
+    "kurunegala": {
+      "status": "skipped"
+    },
+    "polonnaruwa": {
+      "status": "skipped"
+    },
+    "ratnapura": {
+      "status": "skipped"
+    },
+    "trincomalee": {
+      "status": "skipped"
+    },
+    "batticaloa": {
+      "status": "skipped"
+    },
+    "ampara": {
+      "status": "skipped"
+    },
+    "badulla": {
+      "status": "skipped"
+    },
+    "matara": {
+      "status": "skipped"
+    },
+    "hambantota": {
+      "status": "skipped"
+    },
+    "matale": {
+      "status": "skipped"
+    },
+    "nuwara_eliya": {
+      "status": "skipped"
+    },
+    "kegalle": {
+      "status": "skipped"
+    },
+    "kalutara": {
+      "status": "skipped"
+    },
+    "gampaha": {
+      "status": "skipped"
+    },
+    "puttalam": {
+      "status": "skipped"
+    },
+    "mannar": {
+      "status": "skipped"
+    },
+    "vavuniya": {
+      "status": "skipped"
+    },
+    "mullaitivu": {
+      "status": "skipped"
+    },
+    "kilinochchi": {
+      "status": "skipped"
+    },
+    "monaragala": {
+      "status": "skipped"
+    }
+  }
+}

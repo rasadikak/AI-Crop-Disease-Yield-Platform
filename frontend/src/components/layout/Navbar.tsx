@@ -45,7 +45,7 @@ const Navbar = () => {
               <Link to="/dashboard"  className={isActive("/dashboard")}>Dashboard</Link>
               <Link to="/scan"       className={isActive("/scan")}>Disease Scan</Link>
               <Link to="/yield"      className={isActive("/yield")}>Yield Predictor</Link>
-              <Link to="/weather"    className={isActive("/weather")}>Weather</Link>
+              <Link to="/weather"    className={isActive("/weather")}>Weather Anomaly</Link>
               <Link to="/dashboard"    className={isActive("/dashboard")}>AI Chat</Link>
 
               {/* profile dropdown */}
