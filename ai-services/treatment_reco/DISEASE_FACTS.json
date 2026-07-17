@@ -1,0 +1,37 @@
+{
+  "tomato_early_blight": {
+    "display_name": "Tomato Early Blight",
+    "cause": "Fungus Alternaria solani, favored by warm, humid conditions",
+    "organic_treatment": [
+      "Remove and destroy infected lower leaves",
+      "Apply neem oil spray every 7 days",
+      "Improve air circulation by pruning"
+    ],
+    "chemical_treatment": [
+      "Chlorothalonil-based fungicide as per label dosage",
+      "Mancozeb spray at 7-10 day intervals"
+    ],
+    "prevention": [
+      "Crop rotation (avoid tomato/potato in same spot for 2 years)",
+      "Mulch to prevent soil splash onto leaves",
+      "Avoid overhead watering"
+    ],
+    "severity": "moderate"
+  },
+  "rice_blast": {
+    "display_name": "Rice Blast",
+    "cause": "Fungus Magnaporthe oryzae",
+    "organic_treatment": [
+      "Drain and dry the field intermittently to reduce humidity",
+      "Apply well-decomposed compost to strengthen plant resistance"
+    ],
+    "chemical_treatment": [
+      "Tricyclazole-based fungicide per recommended dosage"
+    ],
+    "prevention": [
+      "Use resistant rice varieties where available",
+      "Avoid excess nitrogen fertilizer"
+    ],
+    "severity": "high"
+  }
+}
