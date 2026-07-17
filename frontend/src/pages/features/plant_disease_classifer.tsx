@@ -60,7 +60,7 @@ const PlantDiseaseClassifierPage = () => {
       formData.append("image", file);
 
       
-      const predictRes = await api.post("/plant_disease/predict/", formData, {
+      const predictRes = await api.post("/plant_disease/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       const diseaseName = predictRes.data.disease;
