@@ -119,18 +119,14 @@ const CropYieldPredictorPage = () => {
   const labelClass = "block text-sm font-medium text-gray-700 mb-1";
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center relative"
-      style={{ backgroundImage: "url('/images/cropYieldPredPage.webp')" }}
-    >
-      <div className="absolute inset-0 bg-white/15" />
+    <div className="min-h-screen bg-amber-50">
 
-      <div className="relative z-10 max-w-2xl mx-auto px-4 py-8">
+      <div className="max-w-2xl mx-auto px-4 py-8">
 
         {/* header */}
         <div className="mb-6">
-          <h1 className="text-xl sm:text-2xl font-bold text-white">Crop Yield Predictor</h1>
-          <p className="text-gray-200 text-sm mt-1">
+          <h1 className="text-xl sm:text-2xl font-bold text-green-900">Crop Yield Predictor</h1>
+          <p className="text-gray-600 text-sm mt-1">
             Enter your crop details to get an estimated yield prediction
           </p>
         </div>
@@ -231,7 +227,7 @@ const CropYieldPredictorPage = () => {
         {/* result */}
         {result && (
           <div>
-            <h2 className="text-lg font-semibold text-white mb-3">Prediction Result</h2>
+            <h2 className="text-lg font-semibold text-green-900 mb-3">Prediction Result</h2>
             <ConfidenceBar
               value={result.predicted_yield_kg_per_ha}
               low={result.confidence_low}
@@ -239,7 +235,7 @@ const CropYieldPredictorPage = () => {
             />
 
             {/* context note */}
-            <p className="text-xs text-gray-200 mt-3 text-center">
+            <p className="text-xs text-gray-500 mt-3 text-center">
               Based on FAO global agricultural data. Consult your local Agriculture Extension Office for region-specific guidance.
             </p>
           </div>

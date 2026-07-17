@@ -51,25 +51,21 @@ const WeatherAnomalyDetectorPage = () => {
   }, [district]);
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center relative"
-      style={{ backgroundImage: "url('/images/weatherAnomalyPage.webp')" }}
-    >
-      <div className="absolute inset-0 bg-black/55" />
+    <div className="min-h-screen bg-amber-50">
 
-      <div className="relative z-10 max-w-2xl mx-auto px-4 py-8">
+      <div className="max-w-2xl mx-auto px-4 py-8">
 
         {/* header */}
         <div className="mb-6">
-          <h1 className="text-xl sm:text-2xl font-bold text-white mb-1">Weather Anomaly Detector</h1>
-          <p className="text-green-200 text-sm">
+          <h1 className="text-xl sm:text-2xl font-bold text-green-900 mb-1">Weather Anomaly Detector</h1>
+          <p className="text-gray-600 text-sm">
             {currentMonth} {currentYear} · {district ?? "No district set"}
           </p>
         </div>
 
         {/* no district set */}
         {!district && (
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+          <div className="bg-white border border-amber-200 rounded-2xl p-5">
             <p className="text-amber-800 font-medium text-sm mb-1">⚠️ No district set</p>
             <p className="text-amber-600 text-xs mb-3">
               Set your district in your profile to see weather anomaly alerts for your area.
@@ -85,7 +81,7 @@ const WeatherAnomalyDetectorPage = () => {
 
         {/* loading */}
         {isLoading && (
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 text-center">
+          <div className="bg-white rounded-2xl shadow-sm p-8 text-center">
             <div className="text-4xl mb-3 animate-pulse">🌦️</div>
             <p className="text-gray-600 text-sm font-medium">Analysing weather patterns...</p>
             <p className="text-gray-400 text-xs mt-1">Checking last 90 days for {district}</p>
@@ -119,7 +115,7 @@ const WeatherAnomalyDetectorPage = () => {
           <div className="space-y-4">
 
             {/* summary card */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5">
+            <div className="bg-white rounded-2xl shadow-sm p-5">
               <div className="flex items-center justify-between mb-3">
                 <div>
                   <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Analysis Summary</p>
@@ -168,7 +164,7 @@ const WeatherAnomalyDetectorPage = () => {
             {/* alert cards */}
             {result.is_anomaly && result.alerts?.length > 0 && (
               <div className="space-y-3">
-                <p className="text-white text-sm font-medium">
+                <p className="text-green-900 text-sm font-medium">
                   ⚠️ {result.alerts.length} anomal{result.alerts.length === 1 ? "y" : "ies"} detected
                 </p>
 
@@ -212,7 +208,7 @@ const WeatherAnomalyDetectorPage = () => {
 
             {/* farming advice based on alerts */}
             {result.is_anomaly && (
-              <div className="bg-green-800/90 backdrop-blur-sm rounded-2xl p-5 text-white">
+              <div className="bg-green-800 rounded-2xl p-5 text-white">
                 <p className="text-xs text-green-300 uppercase tracking-wide mb-2">
                   💡 Farming Advice
                 </p>
@@ -242,7 +238,7 @@ const WeatherAnomalyDetectorPage = () => {
                     .finally(() => setIsLoading(false));
                 }
               }}
-              className="w-full bg-white/20 hover:bg-white/30 text-white text-sm font-medium py-2.5 rounded-xl transition-colors border border-white/30"
+              className="w-full bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium py-2.5 rounded-xl transition-colors border border-gray-200"
             >
               🔄 Refresh Analysis
             </button>
