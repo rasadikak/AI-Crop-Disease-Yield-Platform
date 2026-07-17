@@ -1,0 +1,110 @@
+{
+  "district": "kandy",
+  "evaluated_at": "2026-07-17T13:36:26.669364",
+  "total_monthly_records": 312,
+  "year_range": "2000\u20132025",
+  "contamination": 0.05,
+  "training_anomalies": 16,
+  "training_anomaly_rate": 0.0513,
+  "score_separation": 0.1648,
+  "feature_deviations": {
+    "temp_max": 1.487,
+    "temp_min": 0.173,
+    "rainfall": 0.591,
+    "humidity_max": 0.219,
+    "humidity_min": 1.634
+  },
+  "most_anomalous_feature": "humidity_min",
+  "temporal_validation": {
+    "train_samples": 252,
+    "test_samples": 60,
+    "test_anomaly_count": 5,
+    "test_anomaly_rate": 0.0833
+  },
+  "seasonal_stats": {
+    "1": {
+      "mean_rainfall": 118.7,
+      "std_rainfall": 121.0,
+      "mean_temp_max": 26.3,
+      "std_temp_max": 1.3,
+      "sample_count": 26
+    },
+    "2": {
+      "mean_rainfall": 75.7,
+      "std_rainfall": 79.7,
+      "mean_temp_max": 27.9,
+      "std_temp_max": 1.4,
+      "sample_count": 26
+    },
+    "3": {
+      "mean_rainfall": 92.5,
+      "std_rainfall": 87.5,
+      "mean_temp_max": 29.8,
+      "std_temp_max": 1.5,
+      "sample_count": 26
+    },
+    "4": {
+      "mean_rainfall": 163.0,
+      "std_rainfall": 70.7,
+      "mean_temp_max": 29.5,
+      "std_temp_max": 1.5,
+      "sample_count": 26
+    },
+    "5": {
+      "mean_rainfall": 136.9,
+      "std_rainfall": 106.2,
+      "mean_temp_max": 28.2,
+      "std_temp_max": 0.8,
+      "sample_count": 26
+    },
+    "6": {
+      "mean_rainfall": 86.0,
+      "std_rainfall": 40.4,
+      "mean_temp_max": 27.3,
+      "std_temp_max": 0.8,
+      "sample_count": 26
+    },
+    "7": {
+      "mean_rainfall": 93.9,
+      "std_rainfall": 37.4,
+      "mean_temp_max": 27.0,
+      "std_temp_max": 0.7,
+      "sample_count": 26
+    },
+    "8": {
+      "mean_rainfall": 109.6,
+      "std_rainfall": 55.6,
+      "mean_temp_max": 27.1,
+      "std_temp_max": 1.0,
+      "sample_count": 26
+    },
+    "9": {
+      "mean_rainfall": 115.5,
+      "std_rainfall": 46.0,
+      "mean_temp_max": 27.3,
+      "std_temp_max": 0.6,
+      "sample_count": 26
+    },
+    "10": {
+      "mean_rainfall": 265.7,
+      "std_rainfall": 148.1,
+      "mean_temp_max": 27.1,
+      "std_temp_max": 0.6,
+      "sample_count": 26
+    },
+    "11": {
+      "mean_rainfall": 293.8,
+      "std_rainfall": 123.8,
+      "mean_temp_max": 26.5,
+      "std_temp_max": 0.6,
+      "sample_count": 26
+    },
+    "12": {
+      "mean_rainfall": 210.7,
+      "std_rainfall": 144.5,
+      "mean_temp_max": 26.0,
+      "std_temp_max": 1.0,
+      "sample_count": 26
+    }
+  }
+}
