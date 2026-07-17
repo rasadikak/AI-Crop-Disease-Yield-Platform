@@ -54,22 +54,22 @@ const PlantDiseaseClassifierPage = () => {
     }
 
     try {
-      // ── step 1: ML model predicts the disease name from the image ──
+      
       setStage("predicting");
       const formData = new FormData();
       formData.append("image", file);
 
-      // TODO: confirm this matches your actual disease-prediction endpoint
+      
       const predictRes = await api.post("/plant_disease/predict/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       const diseaseName = predictRes.data.disease;
 
-      // ── step 2: Gemini returns treatment recommendations for that disease ──
+     
       setStage("fetching_treatment");
 
-      // TODO: confirm this matches your actual Gemini treatment endpoint
-      const treatmentRes = await api.post("/plant_disease/treatment/", {
+      
+      const treatmentRes = await api.post("/treatment/", {
         disease: diseaseName,
       });
 
