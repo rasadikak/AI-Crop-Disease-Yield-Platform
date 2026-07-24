@@ -76,9 +76,7 @@ better decisions. It provides crop disease detection, treatment recommendations 
 -   Isolation Forest\
 -   Detects anomalies
 
-### treatement recommender based on predicted disease and chatbot
 
--   uses Gemini API
 
 
 ------------------------------------------------------------------------
