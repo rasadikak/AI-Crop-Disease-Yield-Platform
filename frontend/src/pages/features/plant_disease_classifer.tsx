@@ -259,11 +259,7 @@ const PlantDiseaseClassifierPage = () => {
               </div>
             )}
 
-            {treatment && !treatment.is_known_disease && (
-              <div className="bg-amber-50 border border-amber-200 text-amber-700 text-xs rounded-lg px-4 py-3">
-                ⚠️ This disease isn't in our known database yet — the guidance below is general, AI-generated advice.
-              </div>
-            )}
+            
 
             {treatment && (
               <>
