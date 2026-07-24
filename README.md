@@ -12,7 +12,7 @@ better decisions. It provides crop disease detection, treatment recommendations 
 
 ### 🔬 Crop Disease Detection
 
--   Upload leaf images to detect diseases\
+-   Upload leaf images to detect diseases
 -   Uses **ResNet-18 deep learning model (pretrained on ImageNet)**
 -   Provides predictions + treatment suggestions
 
@@ -27,8 +27,8 @@ better decisions. It provides crop disease detection, treatment recommendations 
 
 ### 🌦️ Weather Anomaly Detection
 
--   Detects unusual weather patterns\
--   Covers all **25 districts in Sri Lanka**\
+-   Detects unusual weather patterns
+-   Covers all **25 districts in Sri Lanka**
 -   Alerts:
     -   Drought
     -   Flood risk
@@ -36,14 +36,14 @@ better decisions. It provides crop disease detection, treatment recommendations 
 
 ### 🤖 AI Farming Chatbot
 
--   Powered by **Google Gemini**\
+-   Powered by **Google Gemini**
 -   Provides farming advice\
 
 
 ### 🔐 Authentication System
 
--   Secure login & registration\
--   JWT-based authentication\
+-   Secure login & registration
+-   JWT-based authentication
 -   Email verification & password reset
 
 ------------------------------------------------------------------------
@@ -67,13 +67,13 @@ better decisions. It provides crop disease detection, treatment recommendations 
 
 ### Yield Predictor
 
--   Random Forest\
+-   Random Forest
 -   Output: kg/ha
 -   R² Score: 0.9892
 
 ### Weather Detector
 
--   Isolation Forest\
+-   Isolation Forest
 -   Detects anomalies
 
 
@@ -85,20 +85,20 @@ better decisions. It provides crop disease detection, treatment recommendations 
 
 ### Frontend
 
--   React + Vite\
--   TypeScript\
+-   React + Vite
+-   TypeScript
 -   Tailwind CSS
 
 ### Backend
 
--   Node.js + Express\
--   Prisma ORM\
+-   Node.js + Express
+-   Prisma ORM
 -   PostgreSQL
 
 ### AI Service
 
--   FastAPI\
--   PyTorch\
+-   FastAPI
+-   PyTorch
 -   scikit-learn
 
 ------------------------------------------------------------------------
