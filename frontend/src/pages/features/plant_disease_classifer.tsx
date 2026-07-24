@@ -7,6 +7,21 @@ const SEVERITY_CONFIG: Record<string, { label: string; color: string; bg: string
   severe:   { label: "Severe",   color: "text-red-700",    bg: "bg-red-50",    border: "border-red-200",    dot: "bg-red-500"    },
 };
 
+
+const formatDiseaseName = (raw: string): string => {
+  if (!raw) return "";
+
+  return raw
+    .replace(/[_\-]+/g, " ")       
+    .replace(/[(),]/g, " ")        
+    .replace(/\s+/g, " ")          
+    .trim()
+    .toLowerCase()
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))  // Title Case
+    .join(" ");
+};
+
 type DiseaseFacts = {
   display_name: string;
   cause: string;
@@ -16,7 +31,12 @@ type DiseaseFacts = {
   severity: string;
 };
 
-type DiseaseResult = {
+type PredictionResult = {
+  disease: string;       
+  confidence: number;
+};
+
+type TreatmentResult = {
   disease: string;
   severity: string;
   facts: DiseaseFacts;
@@ -25,11 +45,16 @@ type DiseaseResult = {
 };
 
 const PlantDiseaseClassifierPage = () => {
-  const [file, setFile]           = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [stage, setStage]         = useState<"idle" | "predicting" | "fetching_treatment">("idle");
-  const [error, setError]         = useState("");
-  const [result, setResult]       = useState<DiseaseResult | null>(null);
+  const [file, setFile]               = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl]   = useState<string | null>(null);
+  const [stage, setStage]             = useState<"idle" | "predicting" | "fetching_treatment">("idle");
+
+  const [prediction, setPrediction]   = useState<PredictionResult | null>(null);
+  const [treatment, setTreatment]     = useState<TreatmentResult | null>(null);
+
+  const [predictionError, setPredictionError] = useState("");
+  const [treatmentError, setTreatmentError]   = useState("");
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isLoading = stage === "predicting" || stage === "fetching_treatment";
@@ -38,44 +63,56 @@ const PlantDiseaseClassifierPage = () => {
     const selected = e.target.files?.[0];
     if (!selected) return;
     setFile(selected);
-    setError("");
-    setResult(null);
+    setPredictionError("");
+    setTreatmentError("");
+    setPrediction(null);
+    setTreatment(null);
     setPreviewUrl(URL.createObjectURL(selected));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setResult(null);
+    setPredictionError("");
+    setTreatmentError("");
+    setPrediction(null);
+    setTreatment(null);
 
     if (!file) {
-      setError("Please select a leaf photo to upload");
+      setPredictionError("Please select a leaf photo to upload");
       return;
     }
 
+    
+    let rawDiseaseLabel: string; 
     try {
-      
       setStage("predicting");
       const formData = new FormData();
       formData.append("image", file);
 
-      
-      const predictRes = await api.post("/plant_disease/", formData, {
+      const predictRes = await api.post("/disease/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      const diseaseName = predictRes.data.disease;
 
-     
-      setStage("fetching_treatment");
-
-      
-      const treatmentRes = await api.post("/treatment/", {
-        disease: diseaseName,
+      rawDiseaseLabel = predictRes.data.disease; 
+      setPrediction({
+        disease: rawDiseaseLabel,
+        confidence: predictRes.data.confidence,
       });
-
-      setResult(treatmentRes.data);
     } catch (err: any) {
-      setError(err.response?.data?.error || "Something went wrong — please try again");
+      setPredictionError(err.response?.data?.error || "Couldn't identify the disease — please try another photo");
+      setStage("idle");
+      return;
+    }
+
+    
+    try {
+      setStage("fetching_treatment");
+      const treatmentRes = await api.post("/treatment/", { disease: rawDiseaseLabel });
+      setTreatment(treatmentRes.data);
+    } catch (err: any) {
+      setTreatmentError(
+        err.response?.data?.error || "Diagnosis succeeded, but treatment info is unavailable right now"
+      );
     } finally {
       setStage("idle");
     }
@@ -84,14 +121,20 @@ const PlantDiseaseClassifierPage = () => {
   const handleReset = () => {
     setFile(null);
     setPreviewUrl(null);
-    setError("");
-    setResult(null);
+    setPredictionError("");
+    setTreatmentError("");
+    setPrediction(null);
+    setTreatment(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const severityInfo = result
-    ? SEVERITY_CONFIG[result.severity] ?? SEVERITY_CONFIG["moderate"]
+  const severityInfo = treatment
+    ? SEVERITY_CONFIG[treatment.severity] ?? SEVERITY_CONFIG["moderate"]
     : null;
+
+  
+  const displayDiseaseName = treatment?.facts?.display_name
+    ?? (prediction ? formatDiseaseName(prediction.disease) : "");
 
   return (
     <div className="min-h-screen bg-amber-50">
@@ -152,9 +195,9 @@ const PlantDiseaseClassifierPage = () => {
               )}
             </div>
 
-            {error && (
+            {predictionError && (
               <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3">
-                {error}
+                {predictionError}
               </div>
             )}
 
@@ -186,107 +229,116 @@ const PlantDiseaseClassifierPage = () => {
           </form>
         </div>
 
-        {/* results */}
-        {result && (
+        {/* prediction result */}
+        {prediction && (
           <div className="space-y-4">
 
-            {/* disease + severity header */}
-            <div className={`${severityInfo!.bg} border ${severityInfo!.border} rounded-2xl p-5`}>
+            <div className={`${severityInfo?.bg ?? "bg-green-50"} border ${severityInfo?.border ?? "border-green-200"} rounded-2xl p-5`}>
               <div className="flex items-start justify-between gap-3 mb-1">
                 <div>
                   <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Detected Disease</p>
                   <h2 className="text-lg font-bold text-gray-800">
-                    {result.facts?.display_name ?? result.disease}
+                    {displayDiseaseName}
                   </h2>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Confidence: {prediction.confidence}%
+                  </p>
                 </div>
-                <span className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${severityInfo!.color} bg-white/70 flex-shrink-0`}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${severityInfo!.dot}`} />
-                  {severityInfo!.label}
-                </span>
+                {severityInfo && (
+                  <span className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${severityInfo.color} bg-white/70 flex-shrink-0`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${severityInfo.dot}`} />
+                    {severityInfo.label}
+                  </span>
+                )}
               </div>
-              {!result.is_known_disease && (
-                <p className="text-xs text-amber-700 mt-2">
-                  ⚠️ This disease isn't in our known database — recommendations below are general guidance only.
-                </p>
-              )}
             </div>
 
-            {/* cause */}
-            {result.facts?.cause && (
-              <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                <p className="text-xs text-gray-400 uppercase tracking-wide mb-1.5">Cause</p>
-                <p className="text-sm text-gray-700 leading-relaxed">{result.facts.cause}</p>
+            {treatmentError && (
+              <div className="bg-amber-50 border border-amber-200 text-amber-700 text-sm rounded-lg px-4 py-3">
+                {treatmentError}
               </div>
             )}
 
-            {/* treatments */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {result.facts?.organic_treatment?.length > 0 && (
-                <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                  <p className="text-xs font-semibold text-green-700 uppercase tracking-wide mb-2">
-                    🌿 Organic Treatment
-                  </p>
-                  <ul className="space-y-1.5">
-                    {result.facts.organic_treatment.map((item, i) => (
-                      <li key={i} className="text-sm text-gray-700 leading-relaxed flex gap-2">
-                        <span className="text-green-600 flex-shrink-0">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+            {treatment && !treatment.is_known_disease && (
+              <div className="bg-amber-50 border border-amber-200 text-amber-700 text-xs rounded-lg px-4 py-3">
+                ⚠️ This disease isn't in our known database yet — the guidance below is general, AI-generated advice.
+              </div>
+            )}
+
+            {treatment && (
+              <>
+                {treatment.facts?.cause && (
+                  <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                    <p className="text-xs text-gray-400 uppercase tracking-wide mb-1.5">Cause</p>
+                    <p className="text-sm text-gray-700 leading-relaxed">{treatment.facts.cause}</p>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {treatment.facts?.organic_treatment?.length > 0 && (
+                    <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                      <p className="text-xs font-semibold text-green-700 uppercase tracking-wide mb-2">
+                        🌿 Organic Treatment
+                      </p>
+                      <ul className="space-y-1.5">
+                        {treatment.facts.organic_treatment.map((item, i) => (
+                          <li key={i} className="text-sm text-gray-700 leading-relaxed flex gap-2">
+                            <span className="text-green-600 flex-shrink-0">•</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {treatment.facts?.chemical_treatment?.length > 0 && (
+                    <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                      <p className="text-xs font-semibold text-sky-700 uppercase tracking-wide mb-2">
+                        🧪 Chemical Treatment
+                      </p>
+                      <ul className="space-y-1.5">
+                        {treatment.facts.chemical_treatment.map((item, i) => (
+                          <li key={i} className="text-sm text-gray-700 leading-relaxed flex gap-2">
+                            <span className="text-sky-600 flex-shrink-0">•</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
-              )}
 
-              {result.facts?.chemical_treatment?.length > 0 && (
-                <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                  <p className="text-xs font-semibold text-sky-700 uppercase tracking-wide mb-2">
-                    🧪 Chemical Treatment
-                  </p>
-                  <ul className="space-y-1.5">
-                    {result.facts.chemical_treatment.map((item, i) => (
-                      <li key={i} className="text-sm text-gray-700 leading-relaxed flex gap-2">
-                        <span className="text-sky-600 flex-shrink-0">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
+                {treatment.facts?.prevention?.length > 0 && (
+                  <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                      🛡️ Prevention
+                    </p>
+                    <ul className="space-y-1.5">
+                      {treatment.facts.prevention.map((item, i) => (
+                        <li key={i} className="text-sm text-gray-700 leading-relaxed flex gap-2">
+                          <span className="text-gray-400 flex-shrink-0">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-            {/* prevention */}
-            {result.facts?.prevention?.length > 0 && (
-              <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                  🛡️ Prevention
+                {treatment.explanation && (
+                  <div className="bg-green-800 rounded-2xl p-5 text-white">
+                    <p className="text-xs text-green-300 uppercase tracking-wide mb-2">💬 AI Summary</p>
+                    <p className="text-sm leading-relaxed text-green-100 whitespace-pre-line">
+                      {treatment.explanation.replace(/\*\*/g, "")}
+                    </p>
+                  </div>
+                )}
+
+                <p className="text-xs text-gray-500 text-center">
+                  AI-generated guidance. Consult your local Agriculture Extension Office for region-specific advice.
                 </p>
-                <ul className="space-y-1.5">
-                  {result.facts.prevention.map((item, i) => (
-                    <li key={i} className="text-sm text-gray-700 leading-relaxed flex gap-2">
-                      <span className="text-gray-400 flex-shrink-0">•</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              </>
             )}
 
-            {/* full explanation */}
-            {result.explanation && (
-              <div className="bg-green-800 rounded-2xl p-5 text-white">
-                <p className="text-xs text-green-300 uppercase tracking-wide mb-2">💬 AI Summary</p>
-                <p className="text-sm leading-relaxed text-green-100 whitespace-pre-line">
-                  {result.explanation.replace(/\*\*/g, "")}
-                </p>
-              </div>
-            )}
-
-            {/* context note */}
-            <p className="text-xs text-gray-500 text-center">
-              AI-generated guidance. Consult your local Agriculture Extension Office for region-specific advice.
-            </p>
-
-            {/* scan another */}
             <button
               onClick={handleReset}
               className="w-full bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium py-2.5 rounded-xl transition-colors border border-gray-200"

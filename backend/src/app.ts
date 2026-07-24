@@ -26,7 +26,7 @@ app.use("/api/auth", authRouter);
 
 app.use("/api/chat", chatRouter);
 app.use("/api/crop_yield_predictor", crop_pred_router);
-app.use("/api/disease_classifier", disease_classifier_router);
+app.use("/api/disease", disease_classifier_router);
 
 app.use("/api/weather_anomaly", weather_anomaly_router)
 app.use("/api/treatment", treatment_recommender_router)

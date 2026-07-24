@@ -6,8 +6,6 @@ import FormData from "form-data";
 
 const disease_classifier_router = Router();
 
-// Store the uploaded file in memory (as a Buffer) rather than on disk —
-// we're just relaying it straight to FastAPI, not persisting it locally.
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: {
@@ -34,8 +32,7 @@ disease_classifier_router.post(
         }
 
         try {
-            // Rebuild a multipart/form-data payload to forward to FastAPI,
-            // since the file only exists in memory as a Buffer at this point.
+            
             const formData = new FormData();
             formData.append("file", req.file.buffer, {
                 filename: req.file.originalname,

@@ -5,131 +5,131 @@ from google import genai
 from google.genai import errors as genai_errors
 import os
 import json
-import logging
-from pathlib import Path
+import re
 
 load_dotenv()
-
-
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 router = APIRouter(prefix="/treatment", tags=["treatment"])
 
 
-
-DISEASE_FACTS_PATH = (
-    Path(__file__).resolve().parent.parent / "treatment_reco" / "DISEASE_FACTS.json"
-)
-
-try:
-    with open(DISEASE_FACTS_PATH, "r", encoding="utf-8") as f:
-        DISEASE_FACTS: dict = json.load(f)
-except FileNotFoundError:
-    raise RuntimeError(f"DISEASE_FACTS.json not found at {DISEASE_FACTS_PATH}")
-except json.JSONDecodeError as e:
-    raise RuntimeError(f"DISEASE_FACTS.json is not valid JSON: {e}")
-
-
-UNKNOWN_DISEASE_FALLBACK = {
-    "display_name": None,
-    "cause": None,
-    "organic_treatment": [],
-    "chemical_treatment": [],
-    "prevention": [],
-    "severity": "unknown",
-}
-
-
-SYSTEM_PROMPT = """You are AgriSense's report generator, producing a single
-diagnosis explanation for a Sri Lankan farmer after their crop photo has been
+SYSTEM_PROMPT = """You are AgriSense's plant disease advisor, generating
+treatment guidance for a Sri Lankan farmer after their crop photo has been
 analyzed by an image classification model.
 
-You will be given: the predicted disease name, its cause, organic treatment
-options, chemical treatment options, prevention tips, and severity level.
+You will be given a predicted disease name (from a plant pathology dataset,
+may contain underscores or technical formatting).
 
-Your task: turn these facts into ONE clear, farmer-friendly report. Do not ask
-questions, do not expect a reply, and do not continue a conversation — this is
-a single, final message shown directly on a results screen.
+Your task: respond with ONLY a single valid JSON object, no markdown, no code
+fences, no extra text before or after it. The JSON must have exactly this
+shape:
 
-Strict rules:
-- Do NOT invent facts, causes, dosages, chemical names, or treatments beyond
-  what is explicitly provided. If a field is missing or marked unknown, say so
-  plainly rather than filling it in from general knowledge.
-- If the disease facts are marked unknown/unrecognized, clearly state that a
-  verified treatment isn't available for this exact diagnosis yet, and advise
-  the farmer to consult their local Agriculture Extension Office.
-- Structure the report with short sections (e.g. What's happening, Organic
-  options, Chemical options, Prevention) so it's easy to scan on a phone.
-- Keep the full report under ~150 words.
-- Tone: calm, warm, and practical. State severity factually without alarming
-  language.
-- Always close with a line recommending the farmer confirm region-specific
-  details with their local Agriculture Extension Office.
-- Never ask the farmer a question or invite further chat — end with a
-  statement, not a prompt for input.
+{
+  "display_name": "Human-readable disease name, properly capitalized",
+  "cause": "One sentence describing the biological cause (fungus, bacteria, virus, pest, etc.)",
+  "organic_treatment": ["short actionable step", "short actionable step", "short actionable step"],
+  "chemical_treatment": ["short actionable step", "short actionable step"],
+  "prevention": ["short actionable step", "short actionable step", "short actionable step"],
+  "severity": "mild" | "moderate" | "severe",
+  "explanation": "A warm, farmer-friendly summary under 150 words, structured with short sections (What's happening, Organic options, Chemical options, Prevention). Always close by recommending the farmer confirm region-specific details with their local Agriculture Extension Office."
+}
+
+Rules:
+- If the disease name looks like a real, recognized plant disease, give
+  genuinely accurate agronomic information to the best of your knowledge.
+- If the disease name is unclear, malformed, or you are not confident about
+  it, still return the JSON shape, but set "cause" to a brief honest note
+  that the exact cause isn't certain, keep treatment/prevention arrays short
+  and general, and advise consulting the local Agriculture Extension Office
+  in "explanation".
+- Do not invent specific chemical product names or exact dosages — describe
+  treatment classes/approaches instead (e.g. "copper-based fungicide" is
+  fine, a specific brand name is not).
+- Keep list items short — a single actionable sentence each.
+- "severity" must be exactly one of: mild, moderate, severe.
+- Output raw JSON only. No ```json fences, no commentary.
 """
 
 
 class DiseaseRequest(BaseModel):
     disease: str
 
-   
+
+def format_disease_name(raw: str) -> str:
+    """'Tomato___Target_Spot' -> 'Tomato Target Spot' (fallback only, if Gemini's display_name is missing)"""
+    cleaned = re.sub(r"[_\-]+", " ", raw)
+    cleaned = re.sub(r"[(),]", " ", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    return cleaned.title()
 
 
-def normalize_key(disease: str) -> str:
-    return disease.strip().lower().replace(" ", "_")
+def parse_gemini_json(raw_text: str) -> dict:
+    """Gemini sometimes wraps JSON in ```json fences despite instructions — strip those defensively."""
+    cleaned = raw_text.strip()
+    cleaned = re.sub(r"^```json\s*|\s*```$", "", cleaned, flags=re.IGNORECASE).strip()
+    cleaned = re.sub(r"^```\s*|\s*```$", "", cleaned).strip()
+    return json.loads(cleaned)
 
 
 @router.post("/")
 def treatment_recommender(request: DiseaseRequest):
-    key = normalize_key(request.disease)
-    facts = DISEASE_FACTS.get(key)
-
-    if facts is None:
-        
-        facts = {**UNKNOWN_DISEASE_FALLBACK, "display_name": request.disease}
-
-    user_message = f"""Disease detected: {facts.get("display_name")}
-Cause: {facts.get("cause")}
-Organic treatment options: {facts.get("organic_treatment")}
-Chemical treatment options: {facts.get("chemical_treatment")}
-Prevention tips: {facts.get("prevention")}
-Severity: {facts.get("severity")}
-
-Please explain this to the farmer following your rules."""
+    if not request.disease or not request.disease.strip():
+        raise HTTPException(status_code=400, detail="disease is required")
 
     try:
         response = client.models.generate_content(
             model="gemini-2.5-flash",
-            contents=user_message,
+            contents=f"Predicted disease name: {request.disease}",
             config={"system_instruction": SYSTEM_PROMPT},
         )
-
-    except genai_errors.APIError as e:
-       
+    except genai_errors.APIError:
         raise HTTPException(
             status_code=502,
             detail="Treatment assistant is temporarily unavailable. Please try again shortly.",
         )
-    except Exception as e:
-        
+    except Exception:
         raise HTTPException(
             status_code=500,
             detail="Something went wrong generating the treatment recommendation.",
         )
 
     if not response or not getattr(response, "text", None):
-        
         raise HTTPException(
             status_code=502,
             detail="Treatment assistant returned no response. Please try again.",
         )
 
+    try:
+        facts = parse_gemini_json(response.text)
+    except (json.JSONDecodeError, TypeError):
+        
+        facts = {
+            "display_name": format_disease_name(request.disease),
+            "cause": None,
+            "organic_treatment": [],
+            "chemical_treatment": [],
+            "prevention": [],
+            "severity": "unknown",
+            "explanation": (
+                f"We identified this as {format_disease_name(request.disease)}, but couldn't "
+                f"generate detailed treatment guidance right now. Please consult your local "
+                f"Agriculture Extension Office for advice."
+            ),
+        }
+
+    
+    facts.setdefault("display_name", format_disease_name(request.disease))
+    facts.setdefault("cause", None)
+    facts.setdefault("organic_treatment", [])
+    facts.setdefault("chemical_treatment", [])
+    facts.setdefault("prevention", [])
+    facts.setdefault("severity", "unknown")
+    facts.setdefault("explanation", "")
+
     return {
         "disease": facts.get("display_name"),
         "severity": facts.get("severity"),
         "facts": facts,
-        "explanation": response.text,
-        "is_known_disease": key in DISEASE_FACTS,
+        "explanation": facts.get("explanation"),
     }
