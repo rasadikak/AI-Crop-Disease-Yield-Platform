@@ -1,4 +1,6 @@
 env/
 .env
-
+plant_disease_classifier/dataset
+plant_disease_classifier/plant_disease_model.pth
+plant_disease_classifier/plantvillage_split
 __pycache__
