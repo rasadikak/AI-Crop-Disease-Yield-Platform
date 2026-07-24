@@ -11,13 +11,13 @@ router = APIRouter(prefix='/disease', tags=['disease'])
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-with open("agri_platform\ai-services\plant_disease_classifier\class_to_idx.json", "r") as f:
+with open("./plant_disease_classifier/class_to_idx.json", "r") as f:
     class_to_idx = json.load(f)
 idx_to_class = {v: k for k, v in class_to_idx.items()}
 
 model = models.resnet18(weights=None)
 model.fc = nn.Linear(model.fc.in_features, len(class_to_idx))
-model.load_state_dict(torch.load("agri_platform\ai-services\plant_disease_classifier\plant_disease_model.pth", map_location=device))
+model.load_state_dict(torch.load("./plant_disease_classifier/plant_disease_model.pth", map_location=device))
 model = model.to(device)
 model.eval()
 
